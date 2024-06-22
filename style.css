@@ -4,7 +4,6 @@ body {
 }
 
 .main {
-    width: 590px;
     margin: 0 auto;
     padding-top: 30vh; 
     text-align: center;
@@ -27,9 +26,31 @@ h2 {
     margin: 0;
     padding: 0;
     font-size: 160px;
-    border-radius: 50px;
     color: rgb(29, 29, 31);  
     animation-delay: .8s;
+}
+@media screen and (min-width: 590px) {
+    h2 {
+        font-size: 160px;
+    }
+
+    span {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 590px) {
+    h2 {
+        font-size: 60px;
+    }
+    
+    svg {
+        display: none;
+    }
+
+    span {
+        color: #F8C822;
+    }
 }
 
 @keyframes swift-up {
