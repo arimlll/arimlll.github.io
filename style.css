@@ -1,0 +1,44 @@
+body {
+    background-color: #f5f5f7;
+}
+
+.main {
+    width: 590px;
+    margin: 0 auto;
+    padding-top: 30vh; 
+    text-align: center;
+}
+
+h2, svg {
+    position: relative;
+    top: 3rem;
+    opacity: 0;
+    animation: .35s swift-up ease-out forwards, .35s fade-in ease-out forwards;
+    overflow: hidden;
+}
+
+svg {
+    animation-delay: .5s;
+}
+
+h2 {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 160px;
+    border-radius: 50px;
+    color: rgb(29, 29, 31);  
+    animation-delay: .8s;
+}
+
+@keyframes swift-up {
+    to {
+      top: 0rem;
+    }
+}
+
+@keyframes fade-in {
+    to {
+      opacity: 1;
+    }
+}
