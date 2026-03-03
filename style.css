@@ -17,6 +17,17 @@ h2, svg {
     overflow: hidden;
 }
 
+p {
+    font-family: STZhongSong;
+    opacity: 0;
+    animation-delay: 1s !important;
+    animation: .7s fade-in ease-out forwards;
+}
+
+a {
+    color: #F8C822;
+}
+
 svg {
     animation-delay: .5s;
 }
@@ -29,6 +40,7 @@ h2 {
     color: rgb(29, 29, 31);  
     animation-delay: .8s;
 }
+
 @media screen and (min-width: 590px) {
     h2 {
         font-size: 160px;

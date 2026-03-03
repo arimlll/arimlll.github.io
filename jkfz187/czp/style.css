@@ -1,0 +1,131 @@
+:root{
+    --bg-cl: #FAF9DE;
+    --ft-cl: black;
+}
+
+body{
+    width: 470px;
+    background: var(--bg-cl) !important;
+    color: var(--ft-cl) !important;
+    font-family: -apple-system, Arial, Helvetica, sans-serif, STHeiti !important;
+    margin: 0 auto !important;
+}
+
+@media screen and (max-width: 470px) {
+    body {
+        width: 100%;
+    }
+}
+
+.title{
+    text-align: center;
+    font-size: x-large;
+}
+
+.main_text{
+    margin: 0 auto;
+    width: 85%;
+    text-indent: 36px;
+}
+
+h2{
+    text-align: center;
+    text-indent: 0px;
+}
+
+p{
+    font-size: large;
+}
+
+a{
+    color: #666 !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+hr{
+    border-top:1px dotted var(--ft-cl) !important;
+}
+
+.column{
+    text-align: center;
+}
+
+.navbar{
+    background: var(--bg-cl) !important;
+    position: sticky !important;
+    top: 0 !important;
+    border: 0 !important;
+    z-index: 1;
+}
+
+/* 徽章 */
+.badge{
+    color: var(--bg-cl) !important;
+}
+
+/* 下拉菜单 */
+.dropdown-menu{
+    border-radius: 10px !important;
+}
+
+.dropdown-menu, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+    background: var(--bg-cl) !important;
+    cursor: pointer;
+}
+
+/* 一级菜单 */
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover,
+/* 菜单上面有条线 */
+.navbar-default .navbar-collapse, .navbar-default .navbar-form,
+/* 移动端菜单按钮 */
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover
+{
+    background: var(--bg-cl) !important;
+    border: var(--bg-cl) !important;;
+}
+
+.navbar-toggle{
+    border: 0 !important;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .dropdown-menu>li>a{
+    color: var(--ft-cl) !important;
+}
+
+div.money{
+    text-align: center;
+    text-indent: 0;
+}
+
+input[type=text]{
+    filter: var(--im-light-or-dark);
+    background-color: rgba(255, 255, 255, 0);
+    outline-style: none;
+    border: 1px solid rgba(136, 136, 136, 0.5);
+    border-radius: 50px;
+    text-align: center;
+    color: var(--ft-cl);
+    font-size: large;
+}
+
+input[type=text]::-webkit-input-placeholder{
+    color: rgba(136, 136, 136, 0.5);
+}
+
+input[type=text]:focus{
+    box-shadow: none;
+    border: 1px solid var(--ft-cl);
+}
+
+button#money_enter,#money_clear{
+    margin-top: 1vh;
+    width: 30%;
+    background-color: rgba(255, 255, 255, 0);
+    font-size: large;
+    border: none;
+}
+
+.lock{
+    filter: var(--dqh) var(--im-light-or-dark);
+}

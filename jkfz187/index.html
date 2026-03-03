@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="images/x-icon" href="logo.ico">
+    <title>江科附中2018级七班</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="light_or_dark.js"></script>
+    <meta name="keywords" content="江科附中, 七班, 初三七班, 江科附中七班, 江科附中2018级七班">
+    <meta name="description" content="这里是江科附中2018级七班">
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <script src="bootstrap/jquery.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <script src="hitokoto.js"></script>
+</head>
+
+<body id="body"><br>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="jumbotron">
+                    <h1>
+                        <span style="padding-right:6px;">江科附中</span><br class="hidden-md hidden-lg"><span style="padding-right:6px;">2018</span>级七班
+                    </h1>
+                    <span id="hitokoto">Jiangxi University of Technology High School</span><br class="hidden-lg hidden-md">
+                    <span id="hitokoto_from">&nbsp;</span><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-warning" id="no-light-or-dark" style="display:none;">您的浏览器或设备不支持获取主题模式，默认为浅色。</div>
+        <div class="alert alert-warning" id="no-cookie" style="display:none;">您的浏览器不支持 Cookie ，这意味着我们将不能记忆深浅模式选择，请换用现代浏览器。</div>
+        <noscript>
+            <div class="alert alert-warning">您的浏览器不支持 JavaScript ，这意味着本站部分功能（包括深浅模式选择、中考结束日期计算）将不能使用，请换用现代浏览器。</div>
+        </noscript>
+        <div class="col-sm-4">
+            <p>外观</p>
+            <ul class="nav nav-pills nav-stacked" style="cursor:pointer;">
+                <li class="active"><a onclick="light()" id="light">浅色模式</a></li>
+                <li class="active"><a onclick="dark()" id="dark">深色模式</a></li>
+            </ul><br>
+        </div>
+        <div class="col-sm-4">
+            <script src="time.js"></script>
+            <div id="CountMsg " class="HotDate">
+                <p>2021 年中考已结束：<br>
+                    <b>
+                        <span id="t_d " style="font-size:xx-large;">--</span> 天
+                        <span id="t_h " style="font-size:xx-large;">--</span> 时
+                        <span id="t_m " style="font-size:xx-large;">--</span> 分
+                        <span id="t_s " style="font-size:xx-large;">--</span> 秒
+                    </b>
+                </p>
+                <p style="font-size:large;">起始时间为 2021 年 6 月 19 日 11 时 00 分<br>如有误差敬请谅解</p>
+            </div><br>
+        </div>
+        <div class="col-sm-4">
+            <p>链接</p>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="..\index.html">Ariml</a></li>
+                <li class="active"><a href="czp\index.html">一些蠢小说</a></li>
+                <li class="active"><a href="#">敬请期待</a></li><br>
+            </ul>
+        </div>
+    </div><br>
+    <div class="row" style="margin:0;">
+        <div class="container">
+            <div class="alert alert-info hidden-lg">移动端暂不支持查看教师信息</div>
+            <div class="row clearfix">
+                <div id="myCarousel" class="carousel slide visible-lg">
+                    <!-- 轮播（Carousel）指标 -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                        <li data-target="#myCarousel" data-slide-to="1"></li>
+                        <li data-target="#myCarousel" data-slide-to="2"></li>
+                        <li data-target="#myCarousel" data-slide-to="3"></li>
+                        <li data-target="#myCarousel" data-slide-to="4"></li>
+                        <li data-target="#myCarousel" data-slide-to="5"></li>
+                        <li data-target="#myCarousel" data-slide-to="6"></li>
+                        <li data-target="#myCarousel" data-slide-to="7"></li>
+                        <li data-target="#myCarousel" data-slide-to="8"></li>
+                        <li data-target="#myCarousel" data-slide-to="9"></li>
+                        <li data-target="#myCarousel" data-slide-to="10"></li>
+                        <li data-target="#myCarousel" data-slide-to="11"></li>
+                        <li data-target="#myCarousel" data-slide-to="12"></li>
+                        <li data-target="#myCarousel" data-slide-to="13"></li>
+                        <li data-target="#myCarousel" data-slide-to="14"></li>
+                    </ol>
+                    <!-- 轮播（Carousel）项目 -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img src="img/dwt.webp" alt="邓文婷">
+                            <p style="font-size:15pt;"><br>
+                                数学老师 | 班主任<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    邓文婷，江西师范大学数学系毕业，本科学历，中学数学高级教师，国家奥林匹克大赛优秀指导教师，江西省最美教师，南昌市骨干教师，20年教龄，10年班主任工作经历。原南昌市某重点中学零班数学教师、班主任，2015年入职江科附中，担任初中数学教师、年级组长。曾获南昌市优秀德育标兵、优秀班主任、优秀团干等称号；两次参加南昌市“园丁杯”竞赛获笔试满分且获得教学能手称号；在省市论文评比中，8次获得一等奖；2016年撰写的论文获全国教研成果一等奖；在省市级课件评比中，也多次获得了一等奖的佳绩；独著、合著(第一作者)200万字初中数学教辅资料。逾10年毕业班教学，长年执教初中零班。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/ym.webp" alt="叶萌">
+                            <p><br>
+                                语文老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    叶萌，中学一级教师，教学名师，原青云谱实验学校初中语文老师、校办副主任，江西师范大学汉语言文学专业毕业。有三届初一至初三循环教学经验，历届中考语文成绩均在年级名列第一，且远远超过市平均分。曾获江西省中学语文优秀教育教学论文一等奖、南昌市个人课题一等奖、区“青云杯”课堂教学比赛一等奖、笔试二等奖。主持完成省级课题1项。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/wwt.webp" alt="万文婷">
+                            <p><br>
+                                英语老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    万文婷，原南昌市外国语学校英语老师、初中班主任。江西师范大学英语(师范)专业毕业，英语专业八级，取得专业八级口语与口译证书。2009年—2012年所带班级连续两年半英语单科和总分在全年级名列榜首。2012年4月，全班63位同学，取得了35个直升名额。目前已有23位同学保送各地名校。亦师亦友的她受到家长及学生的一致好评。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/xs.webp" alt="徐思">
+                            <p><br>
+                                英语老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    徐思，江西师范大学国际商务英语专业毕业，本科学历，英语专业八级，8年教龄。原抚州市临川某重点中学英语教师，2017年入职江科附中，担任初中英语教师。多次在学校及教研室组织的教学教研活动中开设公开课并获得好评。指导多名学生在2017年全国中学生英语能力竞赛中荣获一等奖，本人被评为“全国优秀指导教师”。有多年的高三毕业班英语教学经验，常年执教该校重点班、特色“双学班”
+                                    。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/ljs.webp" alt="刘家盛">
+                            <p style="font-size:large;"><br>
+                                物理老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    刘家盛，江西师范大学物理系毕业，本科学历，中学物理高级教师，全国初中应用物理知识竞赛优秀指导教师，江西省基础教育质量监测与评估开发团队成员，南昌市初中物理学科课堂教学视导团专家，南昌市初中物理学科带头人，南昌市中学物理教育专业委员会理事，13年教龄，5年班主任工作经历。原南昌市某重点中学物理教师，
+                                    2017年入职江科附中，担任初中物理教师。曾获第11届全国中学物理青年教师教学大赛一等奖第一名、第13届全省中学物理青年教学大赛一等奖第一名、南昌市“园丁杯”一等奖第一名、教育部
+                                    “一师一优课、一课一名师”部级优课，指导多名教师在全国及省市教学竞赛中获得一等奖，近年来20余次在省市教研活动中提供示范课，10余次参与南昌市期中考试以及省中考样卷命题，多篇论文在省市评比中获一等奖。有9年的毕业班数学教学经验，有10余名学生在中考取得满分状元，其中2018年中考曾逸之、王睿洋同学获得中考满分。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/dyq.webp" alt="邓永青">
+                            <p style="font-size:large;"><br>
+                                物理老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    邓永青，江西师范大学物理教育学毕业，本科学历，中学物理一级教师，
+                                    23年教龄，7年班主任工作经历。原南昌市某重点中学物理教师，2020年入职江科附中，现担任初中物理教师。曾获第七届全国青年教师教学大赛预赛一等奖，曾获得全国初中应用物理竞赛优秀指导教师。曾参加市教育考试院中考总复习公益讲座。教案收录于《初中物理教学设计与实录》和《南昌市九年义务教育教材教案集》等。长年执教毕业班物理教学、曾担任年级组长，班主任等，教学态度严谨，课堂幽默风趣，深受学生和家长喜爱。所教学生多人次取得中考满分。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/wt.webp" alt="吴涛">
+                            <p style="font-size:2rem;"><br>
+                                化学老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    吴涛，大学本科学历，中学化学高级教师，22年教龄。原南昌市某重点中学初中化学教师，2017年入职江科附中，担任初中化学教师。曾获南昌市“园丁杯”教学比赛一等奖第一名，多篇论文在省市评比中获一等奖，参与主编多本教学辅导书，辅导学生参加各级比赛获奖学生几百人。有22年的毕业班化学教学经验，先后有100余名学生取得中考满分，2019年中考所教初三8班化学平均分96.02分，满分9人。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/wz.webp" alt="王争"
+                                style="margin-right:80px!important;">
+                            <p style="font-size:large;"><br>
+                                政治老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    王争，江西师范大学政教系毕业，本科学历，中学政治高级教师，江西省青年骨干教师、南昌市政治中心组核心成员、北京师范大学全国初中政治骨干教师研修班学员、江西师范大学马列学院国培班授课教师，27年教龄，12年班主任工作经历。2016年入职江科附中，担任初中政治教师。曾获南昌市优秀共产党员称号，获江西省高中政治课比赛一等奖、南昌市“园丁杯”教学比赛二等奖，两次荣获南昌市时事教育先进个人称号，所带过的班先后两次荣获南昌市优秀班集体称号。公开发表交流的论文、著作近二十篇（册），其中多篇论文在省市评比中获一等奖。有24年的初三毕业班和6年高三毕业班政治教学经验，先后培养了7名中考状元。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/hh.webp" alt="黄花">
+                            <p style="font-size:2.5rem;"><br>
+                                历史老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    黄花，女，29岁，7年教龄，3年班主任工作经历，江西科技师范大学历史系毕业，中学一级教师，原高新外国语历史教师。曾获优秀班主任称号，在省市级刊物上发表论文多篇，并有多篇论文在历史年会中获一等奖。从教7年来，所带班级历史学科成绩均在全年级前列，并深受学生喜欢和家长的信赖。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/xwy.webp" alt="熊为云"
+                                style="margin-right:50px!important;">
+                            <p style="margin-right:50px!important;"><br>
+                                生物老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    熊为云，江西科技师范大学生命科学院毕业，本科学历，中学生物一级教师，10年教龄，3年班主任工作经历。2017年入职江科附中，担任初中生物教师。曾获南昌市第八届“园丁杯”教学竞赛一等奖第一名、第七届“园丁杯”课堂教学第二名。获2019年南昌市教学实验说课二等奖、教学竞赛二等奖，主持市级课题《关于七年级生物课堂教学管理问题和解决策略的研究》。担任班主任期间，荣获南昌市“国防教育日”人防竞赛“优秀指导老师”、南昌市全市教育系统优秀共青团干部称号。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/wch.webp" alt="万春红">
+                            <p style="font-size:large;"><br>
+                                生物老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    万春红，江西师范大学生命科学学院毕业，研究生学历，3年教龄，2016年入职江科附中，担任初中生物教师。曾获南昌市“希沃杯”教学比赛一等奖、“探究杯”优质课大赛二等奖、第十六届“全国中小学信息技术创新与实践活动”初中组三等奖以及优秀指导教师称号；多篇论文获南昌市评比一、二等奖，主持南昌市教育科学“十三五”课题《国际双语生物课程与汉语生物课程的对比研究》；参与南昌市生物学科的公开课以及命题工作；所辅导的学生在2017年中学生生物竞赛中获全国二等奖、江西省一等奖。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/zll.webp" alt="宗莉莉"
+                                style="margin-right:50px!important;">
+                            <p style="margin-right:50px!important;"><br>
+                                地理老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    宗莉莉，女，26岁，中学地理教师，硕士研究生，毕业于江西师范大学。本科就读于江西师范大学地理专业并因成绩优异保送师大硕士研究生，具有丰富的教育理论基础。热爱地理教育，爱探究地理教育问题，在校期间在教师技能比赛中多次获奖，曾担任莲塘二中高中实习教师和师大附中高二地理见习教师。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img
+                                src="img/tb.webp" alt="唐斌">
+                            <p><br>
+                                体育老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    唐斌，大学本科学历，中学体育一级教师，16年教龄。2015年入职江科附中，担任中学体育教师、气排球校队教练。曾获优秀教师、优秀教练员称号。省级课题结题一项，发表省级论文两篇。所带校队获得南昌市中学生女子排球比赛第五名、第六名、第八名的成绩。2018年中考体育考试初三平均分46.8（50分满分），2019年中考体育考试初三平均分52.5（55分满分）的成绩。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/zzx.webp" alt="张哲欣">
+                            <p style="font-size:large;"><br><br>
+                                美术老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    张哲欣，女，25岁，硕士研究生学历，江西师范大学毕业，江西省美术家协会会员。插画作品入选江西教育出版社、江西高校出版社书籍《小学古诗文读本》，全国美育成果展评，作品《庭内清逸》荣获全国高校美育成果展评学生组一等奖，江西省第十二届女美术家作品展，《夏日狂想曲》一等奖，2012-2013国家汉办驻泰国代表处优秀组织奖，全国道教题材美术书法名家精品展《老子出山》，江西省第二届新人新作书法展《千字文临贴》。
+                                </small>
+                            </p>
+                        </div>
+                        <div class="item">
+                            <img src="img/zl.webp" alt="朱玲"
+                                style="margin-right:50px!important;">
+                            <p style="font-size:large;margin-right:50px!important;"><br>
+                                音乐老师<br><br>
+                                <small>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    朱玲，女，35岁，13年教龄，原临川一中音乐教师，中学一级教师。曾荣获全省中小学教师暨教师教育院校师生才艺竞赛一等奖、抚州市中小学教师才艺竞赛一等奖、抚州市首届中小学音乐美术教师教学能力大赛优质课二等奖、抚州市首届中小学音乐美术教师教学能力大赛综合二等奖。指导学生表演《奔驰在千里草原上》获市第五届“金色童年”少儿民族乐器比赛二胡组二等奖，指导学生表演《我是一个小山包》获市第二届中小学生才艺电视大赛中学组一等奖，指导的文艺节目获市第十二届中小学艺术节艺术表演类（器乐）中学一等奖。
+                                </small>
+                            </p>
+                        </div>
+                        <!-- 轮播（Carousel）导航 -->
+                        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev"
+                            style="border-radius:20px;background-image:linear-gradient(to right, var(--bg-light-or-dark) , rgba(255, 255, 255, 0));">
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next"
+                            style="border-radius:20px;background-image:linear-gradient(to left, var(--bg-light-or-dark) , rgba(255, 255, 255, 0))">
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+    <br class="hidden-sm hidden-xs">
+    <br class="hidden-sm hidden-xs">
+    <!-- <div class="container">
+        <div class="row">
+            <div class="col-md-12 column">
+                <p>照片下载</p>
+                <div class="col-sm-4 images">
+                    <a href="https://www.aliyundrive.com/s/j2x3W3qv2AY" target="_blank"><img src="img/img01.webp"
+                            alt="毕业照"></a><br><br>
+                    <p>毕业照 <small style="color:#666666">| 4.09 GB</p><br>
+                </div>
+                <div class="col-sm-4 images">
+                    <a href="https://www.aliyundrive.com/s/LfJASdCCrKJ" target="_blank"><img src="img/img02.webp"
+                            alt="2021元旦汇演"></a><br><br>
+                    <p>2021 元旦汇演 <small style="color:#666666">| 5.92 GB</p><br>
+                </div>
+                <div class="col-sm-4 images">
+                    <a href="https://www.aliyundrive.com/s/D2JZSYaBqzW" target="_blank"><img src="img/img03.webp"
+                            alt="初三远足"></a><br><br>
+                    <p>初三远足 <small style="color:#666666">| 289 MB</p>
+                    <br>
+                </div>
+            </div>
+        </div> -->
+    </div><br><br>
+    <div class="tailer">
+        <p>Copyright © Ariml | Version 5.7.1 | <span data-toggle="modal" data-target="#about" style="cursor:pointer;">关于</span></p>
+        <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button><br>
+                        <h4 class="modal-title" id="myModalLabel">关于</h4>
+                        声明：本站由个人维护，与校方无关。<br>
+                        教师信息均来自<a href="https://www.jkfz.cn/" target="_blank">江科附中官网</a>，更新不及时。<br>
+                        GitHub 仓库：<a href="https://github.com/jkfz187/jkfz187.github.io" target="_blank">github.com/jkfz187/jkfz187.github.io</a><br><br>
+                        <div style="text-align:left;margin:0 auto;display:inline-block;">
+                            <li>使用 <a href="LICENSE" target="_blank">AGPL V3</a> 开源许可证</li>
+                            <li>采用 <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> 开源框架</li>
+                            <li>Pages 服务由 <a href="https://github.com/" target="_blank">Github</a> 和
+                            <a href="https://vercel.com/" target="_blank">Vercel</a> 提供</li>
+                            <li>随机句子由 <a href="https://hitokoto.cn/" target="_blank">一言</a> 提供</li>
+                            <!-- <li>照片文件存储服务由 <a href="https://www.aliyundrive.com/">阿里云盘</a> 提供</li><br> -->
+                        </div><br>
+                        联系我们：beiming.ariml@outlook.com
+                        <br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
