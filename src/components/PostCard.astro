@@ -1,0 +1,90 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  pubDate: string;
+  slug: string;
+  tags?: string[];
+}
+
+const { title, description, pubDate, slug, tags = [] } = Astro.props;
+const date = new Date(pubDate);
+const formattedDate = date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<article class="post-card">
+  <a href={`/blog/${slug}/`} class="post-card-link">
+    <h3 class="post-card-title">{title}</h3>
+    <p class="post-card-desc">{description}</p>
+    <div class="post-card-meta">
+      <time datetime={date.toISOString()}>{formattedDate}</time>
+      {tags.length > 0 && (
+        <div class="post-card-tags">
+          {tags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>
+
+<style>
+  .post-card {
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background-color: var(--color-card-bg);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+  }
+
+  .post-card-link {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .post-card-title {
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+  }
+
+  .post-card-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .post-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    flex-wrap: wrap;
+  }
+
+  .post-card-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    background-color: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+</style>

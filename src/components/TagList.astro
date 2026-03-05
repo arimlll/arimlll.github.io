@@ -1,0 +1,36 @@
+---
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+{tags.length > 0 && (
+  <div class="tag-list">
+    {tags.map(tag => (
+      <a href={`/tags/${tag}/`} class="tag-pill">{tag}</a>
+    ))}
+  </div>
+)}
+
+<style>
+  .tag-list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag-pill {
+    background-color: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    padding: 0.2rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .tag-pill:hover {
+    opacity: 0.8;
+  }
+</style>

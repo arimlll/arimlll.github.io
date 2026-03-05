@@ -1,0 +1,74 @@
+---
+/**
+ * Giscus comment component.
+ * To enable: 
+ * 1. Enable Discussions on your GitHub repo (arimlll/arimlll.github.io)
+ * 2. Install giscus app: https://github.com/apps/giscus
+ * 3. Get your config at https://giscus.app/
+ * 4. Fill in REPO_ID and CATEGORY_ID below
+ */
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = 'zh-CN' } = Astro.props;
+
+const REPO = 'arimlll/arimlll.github.io';
+const REPO_ID = 'R_kgDOMMrepw';
+const CATEGORY = 'General';
+const CATEGORY_ID = 'DIC_kwDOMMrep84C3wNJ';
+---
+<div id="giscus-container" class="giscus-wrapper"></div>
+
+<script define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID, lang }}>
+  function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container || !REPO_ID || !CATEGORY_ID) return;
+
+    container.innerHTML = '';
+
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark'
+      ? 'dark'
+      : 'light';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', REPO);
+    script.setAttribute('data-repo-id', REPO_ID);
+    script.setAttribute('data-category', CATEGORY);
+    script.setAttribute('data-category-id', CATEGORY_ID);
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', theme);
+    script.setAttribute('data-lang', lang);
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function onThemeChange(e) {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: e.detail.theme === 'dark' ? 'dark' : 'light' } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  loadGiscus();
+  window.addEventListener('theme-change', onThemeChange);
+  document.addEventListener('astro:after-swap', loadGiscus);
+</script>
+
+<style>
+  .giscus-wrapper {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
