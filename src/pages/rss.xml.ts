@@ -30,7 +30,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: '啊睿猫 | Ariml\'s Blog',
-    description: '啊睿猫的个人博客，分享技术、生活和创作',
+    description: '啊睿猫的个人博客，分享法律和生活。',
     site: context.site!,
     items,
     customData: `<language>zh-cn</language>`,
