@@ -5,9 +5,10 @@ interface Props {
   pubDate: string;
   slug: string;
   tags?: string[];
+  wordCount?: number;
 }
 
-const { title, description, pubDate, slug, tags = [] } = Astro.props;
+const { title, description, pubDate, slug, tags = [], wordCount } = Astro.props;
 const date = new Date(pubDate);
 const formattedDate = date.toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -21,6 +22,7 @@ const formattedDate = date.toLocaleDateString('zh-CN', {
     <p class="post-card-desc">{description}</p>
     <div class="post-card-meta">
       <time datetime={date.toISOString()}>{formattedDate}</time>
+      {wordCount && <span class="word-count">{wordCount} 字</span>}
       {tags.length > 0 && (
         <div class="post-card-tags">
           {tags.map(tag => (
@@ -86,5 +88,9 @@ const formattedDate = date.toLocaleDateString('zh-CN', {
     padding: 0.1rem 0.5rem;
     border-radius: 4px;
     font-size: 0.75rem;
+  }
+
+  .word-count {
+    color: var(--color-text-secondary);
   }
 </style>

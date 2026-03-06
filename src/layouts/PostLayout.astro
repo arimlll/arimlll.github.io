@@ -10,9 +10,11 @@ interface Props {
   updatedDate?: Date;
   tags?: string[];
   lang?: string;
+  source?: string;
+  wordCount?: number;
 }
 
-const { title, description, pubDate, updatedDate, tags = [], lang = 'zh' } = Astro.props;
+const { title, description, pubDate, updatedDate, tags = [], lang = 'zh', source, wordCount } = Astro.props;
 
 const formattedPubDate = pubDate.toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -37,6 +39,10 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('zh-CN', {
             (更新于 <time datetime={updatedDate.toISOString()}>{formattedUpdatedDate}</time>)
           </span>
         )}
+        {wordCount && (
+          <span class="word-count">· {wordCount} 字 · 转载请标注来源</span>
+        )}
+        
       </div>
       <TagList tags={tags} />
     </header>
@@ -72,6 +78,31 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('zh-CN', {
 
   .updated {
     margin-left: 0.25rem;
+  }
+
+  .word-count {
+    margin-left: 0.25rem;
+  }
+
+  .post-source {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color-tag-bg);
+    border-radius: 6px;
+    border-left: 3px solid var(--color-accent);
+  }
+
+  .post-source a {
+    color: var(--color-accent);
+    word-break: break-all;
+  }
+
+  .post-notice {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
   }
 
   .post-divider {

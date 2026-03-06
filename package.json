@@ -10,12 +10,23 @@
     "astro": "astro"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
     "astro": "^5.18.0",
-    "fuse.js": "^7.1.0"
+    "fuse.js": "^7.1.0",
+    "markdown-it": "^14.1.1",
+    "remark-reading-time": "^2.0.2",
+    "sanitize-html": "^2.17.1",
+    "unist-util-visit": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/sanitize-html": "^2.16.0"
   }
 }

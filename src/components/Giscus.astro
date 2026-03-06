@@ -21,6 +21,11 @@ const CATEGORY_ID = 'DIC_kwDOMMrep84C3wNJ';
 ---
 <div id="giscus-container" class="giscus-wrapper"></div>
 
+<!-- Toast Notification -->
+<div id="toast" class="toast">
+  <span id="toast-message"></span>
+</div>
+
 <script define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID, lang }}>
   function loadGiscus() {
     const container = document.getElementById('giscus-container');
@@ -60,6 +65,32 @@ const CATEGORY_ID = 'DIC_kwDOMMrep84C3wNJ';
     }
   }
 
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    if (!toast || !toastMessage) return;
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  // 监听 Giscus 消息
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://giscus.app') return;
+    
+    const { data } = event;
+    if (typeof data === 'object' && data.giscus) {
+      // 评论创建成功
+      if (data.giscus.discussion && data.giscus.discussion.url) {
+        showToast('评论已发布');
+      }
+    }
+  });
+
   loadGiscus();
   window.addEventListener('theme-change', onThemeChange);
   document.addEventListener('astro:after-swap', loadGiscus);
@@ -70,5 +101,32 @@ const CATEGORY_ID = 'DIC_kwDOMMrep84C3wNJ';
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 1px solid var(--color-border);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--color-accent);
+    color: #000;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  [data-theme="dark"] .toast {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 </style>

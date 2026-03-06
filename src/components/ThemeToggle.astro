@@ -59,11 +59,11 @@ const navLinks = [
     border-color: var(--color-accent);
   }
 
-  :global([data-theme="dark"]) .icon-sun {
+  :global([data-theme="dark"]) .theme-toggle .icon-sun {
     display: none;
   }
 
-  :global(:not([data-theme="dark"])) .icon-moon {
+  :global([data-theme="light"]) .theme-toggle .icon-moon {
     display: none;
   }
 </style>

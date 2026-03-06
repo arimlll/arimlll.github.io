@@ -106,6 +106,7 @@ main {
 
 .prose p {
   margin-bottom: 1.5em;
+  text-indent:2em;
 }
 
 .prose h2 {
