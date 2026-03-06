@@ -59,11 +59,14 @@ const navLinks = [
     border-color: var(--color-accent);
   }
 
+  /* 深色模式：隐藏太阳，显示月亮 */
   :global([data-theme="dark"]) .theme-toggle .icon-sun {
     display: none;
   }
 
-  :global([data-theme="light"]) .theme-toggle .icon-moon {
+  /* 浅色模式或未设置时：隐藏月亮，显示太阳 */
+  :global([data-theme="light"]) .theme-toggle .icon-moon,
+  :global(:not([data-theme="dark"])) .theme-toggle .icon-moon {
     display: none;
   }
 </style>
