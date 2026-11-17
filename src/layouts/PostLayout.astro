@@ -101,13 +101,13 @@ const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
     </div>
 
     <section class="comments-section">
-      <h2 class="comments-title">评论</h2>
+      <h2 class="comments-title" data-i18n="post.comments">评论</h2>
       <Giscus lang={lang === 'ja' ? 'ja' : lang === 'en' ? 'en' : 'zh-CN'} />
     </section>
   </article>
 
   <!-- Back to top button -->
-  <button id="back-to-top" class="back-to-top" aria-label="回到顶部" title="回到顶部">
+  <button id="back-to-top" class="back-to-top" aria-label="回到顶部" title="回到顶部" data-i18n-title="post.backToTop">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>

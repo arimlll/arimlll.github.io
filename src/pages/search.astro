@@ -14,8 +14,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 ---
 <BaseLayout title="搜索" description="搜索博客文章，按标题、描述或标签查找。">
   <div class="page-header">
-    <h1 class="page-title">搜索文章</h1>
-    <p class="page-desc">按标题、摘要或标签实时检索全站文章</p>
+    <h1 class="page-title" data-i18n="search.title">搜索文章</h1>
+    <p class="page-desc" data-i18n="search.desc">按标题、摘要或标签实时检索全站文章</p>
   </div>
 
   <div class="search-box">
@@ -27,6 +27,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       type="search"
       id="search-input"
       placeholder="输入关键词搜索（快捷键 / 聚焦）..."
+      data-i18n-placeholder="search.placeholder"
       autocomplete="off"
     />
     <button id="search-clear" class="search-clear" aria-label="清空搜索" style="display:none;">

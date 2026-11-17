@@ -48,8 +48,11 @@ const CATEGORY_ID = GISCUS_CONFIG.categoryId;
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
+    const currentLang = localStorage.getItem('lang') || lang;
+    const giscusLang = currentLang === 'ja' ? 'ja' : currentLang === 'en' ? 'en' : 'zh-CN';
+
     script.setAttribute('data-theme', getGiscusTheme());
-    script.setAttribute('data-lang', lang);
+    script.setAttribute('data-lang', giscusLang);
     script.setAttribute('crossorigin', 'anonymous');
     script.async = true;
     container.appendChild(script);
@@ -61,6 +64,18 @@ const CATEGORY_ID = GISCUS_CONFIG.categoryId;
       const theme = e.detail?.theme === 'dark' ? 'noborder_dark' : 'light';
       iframe.contentWindow.postMessage(
         { giscus: { setConfig: { theme } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  function onLangChange(e) {
+    const targetLang = e.detail?.lang;
+    const giscusLang = targetLang === 'ja' ? 'ja' : targetLang === 'en' ? 'en' : 'zh-CN';
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { lang: giscusLang } } },
         'https://giscus.app'
       );
     }
@@ -93,6 +108,7 @@ const CATEGORY_ID = GISCUS_CONFIG.categoryId;
 
   loadGiscus();
   window.addEventListener('theme-change', onThemeChange);
+  window.addEventListener('lang-change', onLangChange);
   document.addEventListener('astro:after-swap', loadGiscus);
 </script>
 

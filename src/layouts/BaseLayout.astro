@@ -48,9 +48,10 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
 
-    <!-- Theme initialization (synchronous to prevent flash) -->
+    <!-- Theme & Language initialization (synchronous to prevent flash) -->
     <script is:inline>
       (function() {
+        // Theme initialization
         const metaTheme = document.querySelector('meta[name="color-scheme"]');
         const stored = localStorage.getItem('theme');
         let theme = stored;
@@ -68,6 +69,16 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
             document.documentElement.setAttribute('data-theme', next);
           }
         });
+
+        // Language initialization
+        const storedLang = localStorage.getItem('lang');
+        let lang = storedLang;
+        if (!lang) {
+          const navLang = navigator.language.toLowerCase();
+          lang = navLang.startsWith('ja') ? 'ja' : navLang.startsWith('en') ? 'en' : 'zh';
+        }
+        document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang);
+        document.documentElement.setAttribute('data-lang', lang);
       })();
     </script>
   </head>

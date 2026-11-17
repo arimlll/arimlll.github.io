@@ -13,7 +13,7 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
 ---
 <BaseLayout title="标签" description="按文章标签分类浏览，快速查找感兴趣的话题。">
   <div class="page-header">
-    <h1 class="page-title">标签归档</h1>
+    <h1 class="page-title" data-i18n="tags.title">标签归档</h1>
     <p class="page-desc">全站共 {sortedTags.length} 个分类标签，点击即可浏览相关主题文章</p>
   </div>
 

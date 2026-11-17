@@ -1,0 +1,258 @@
+---
+import { LANGUAGES } from '@/i18n/translations';
+---
+<div class="lang-switch-wrapper" id="lang-switch-wrapper">
+  <button
+    class="lang-toggle-btn"
+    id="lang-toggle-btn"
+    aria-label="切换语言 / Change Language"
+    title="切换语言 / Change Language"
+    aria-expanded="false"
+    aria-haspopup="true"
+  >
+    <svg class="icon-globe" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="2" y1="12" x2="22" y2="12"></line>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+    </svg>
+    <span class="current-lang-code" id="current-lang-code">中</span>
+    <svg class="icon-chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+
+  <div class="lang-dropdown" id="lang-dropdown" role="menu">
+    {LANGUAGES.map(lang => (
+      <button
+        class="lang-option"
+        role="menuitem"
+        data-lang={lang.code}
+        data-short={lang.short}
+      >
+        <span class="lang-name">{lang.label}</span>
+        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  import { UI_TRANSLATIONS, type Lang } from '@/i18n/translations';
+
+  function applyLanguage(lang: Lang) {
+    const dict = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.zh;
+
+    // 更新 HTML lang 属性
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang);
+    document.documentElement.setAttribute('data-lang', lang);
+
+    // 更新按钮文字
+    const codeEl = document.getElementById('current-lang-code');
+    if (codeEl) {
+      codeEl.textContent = lang === 'en' ? 'EN' : lang === 'ja' ? '日' : '中';
+    }
+
+    // 更新下拉项的高亮状态
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      const isSelected = btn.getAttribute('data-lang') === lang;
+      btn.classList.toggle('selected', isSelected);
+      btn.setAttribute('aria-selected', String(isSelected));
+    });
+
+    // 翻译所有带有 data-i18n 的元素
+    document.querySelectorAll<HTMLElement>('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key && dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    // 翻译 placeholder
+    document.querySelectorAll<HTMLInputElement>('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (key && dict[key]) {
+        el.placeholder = dict[key];
+      }
+    });
+
+    // 翻译 title / aria-label
+    document.querySelectorAll<HTMLElement>('[data-i18n-title]').forEach(el => {
+      const key = el.getAttribute('data-i18n-title');
+      if (key && dict[key]) {
+        el.title = dict[key];
+        el.setAttribute('aria-label', dict[key]);
+      }
+    });
+
+    // 广播语言改变事件
+    window.dispatchEvent(new CustomEvent('lang-change', { detail: { lang } }));
+  }
+
+  function initLanguageSwitch() {
+    const wrapper = document.getElementById('lang-switch-wrapper');
+    const toggleBtn = document.getElementById('lang-toggle-btn');
+    const dropdown = document.getElementById('lang-dropdown');
+    if (!wrapper || !toggleBtn || !dropdown) return;
+
+    // 读取已存语言或浏览器首选
+    const stored = (localStorage.getItem('lang') as Lang) || 'zh';
+    applyLanguage(stored);
+
+    function toggleDropdown(open?: boolean) {
+      const isOpen = open !== undefined ? open : !dropdown!.classList.contains('open');
+      dropdown!.classList.toggle('open', isOpen);
+      toggleBtn!.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown();
+    });
+
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetLang = (btn.getAttribute('data-lang') as Lang) || 'zh';
+        localStorage.setItem('lang', targetLang);
+        applyLanguage(targetLang);
+        toggleDropdown(false);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target as Node)) {
+        toggleDropdown(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+        toggleDropdown(false);
+        toggleBtn.focus();
+      }
+    });
+  }
+
+  initLanguageSwitch();
+  document.addEventListener('astro:after-swap', initLanguageSwitch);
+</script>
+
+<style>
+  .lang-switch-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lang-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.65rem;
+    background: none;
+    border: 1px solid var(--color-card-border);
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .lang-toggle-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+    background-color: var(--color-card-bg);
+  }
+
+  .current-lang-code {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .icon-chevron {
+    transition: transform 0.2s ease;
+    opacity: 0.6;
+  }
+
+  .lang-toggle-btn[aria-expanded="true"] .icon-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Zeabur-inspired frosted glass dropdown */
+  .lang-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 136px;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: 12px;
+    padding: 0.35rem;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.2s;
+    pointer-events: none;
+  }
+
+  .lang-dropdown.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .lang-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.75rem;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--color-text);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all 0.15s ease;
+  }
+
+  .lang-option:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-accent-text);
+  }
+
+  [data-theme="light"] .lang-option:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .lang-option.selected {
+    background-color: var(--color-tag-bg);
+    color: var(--color-accent-text);
+    font-weight: 600;
+  }
+
+  .check-icon {
+    opacity: 0;
+    color: var(--color-accent-text);
+    transition: opacity 0.15s ease;
+  }
+
+  .lang-option.selected .check-icon {
+    opacity: 1;
+  }
+</style>

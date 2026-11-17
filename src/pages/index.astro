@@ -26,8 +26,8 @@ const postsWithWordCount = await Promise.all(
   {posts.length > 0 && (
     <section class="recent-posts">
       <div class="section-header">
-        <h2 class="section-title">最新文章</h2>
-        <a href="/blog/" class="view-all-link">全部文章 ({posts.length}) &rarr;</a>
+        <h2 class="section-title" data-i18n="home.recentPosts">最新文章</h2>
+        <a href="/blog/" class="view-all-link"><span data-i18n="home.viewAll">全部文章</span> ({posts.length}) &rarr;</a>
       </div>
       <div class="post-list">
         {postsWithWordCount.map(post => (

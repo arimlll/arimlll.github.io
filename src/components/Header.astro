@@ -1,15 +1,16 @@
 ---
 import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitch from './LanguageSwitch.astro';
 
 const currentPath = Astro.url.pathname;
 
 const navLinks = [
-  { href: '/', label: '首页' },
-  { href: '/blog/', label: '博客' },
-  { href: '/tags/', label: '标签' },
-  { href: '/guestbook/', label: '留言' },
-  { href: '/search/', label: '搜索' },
+  { href: '/', label: '首页', key: 'nav.home' },
+  { href: '/blog/', label: '博客', key: 'nav.blog' },
+  { href: '/tags/', label: '标签', key: 'nav.tags' },
+  { href: '/guestbook/', label: '留言', key: 'nav.guestbook' },
+  { href: '/search/', label: '搜索', key: 'nav.search' },
 ];
 
 function isLinkActive(linkHref: string, path: string): boolean {
@@ -37,11 +38,13 @@ const isHomePage = currentPath === '/' || currentPath === '';
           <a
             href={link.href}
             class:list={['nav-link', { active: isLinkActive(link.href, currentPath) }]}
+            data-i18n={link.key}
           >
             {link.label}
           </a>
         ))}
       </div>
+      <LanguageSwitch />
       <ThemeToggle />
       <button class="menu-toggle" id="menu-toggle" aria-label="切换菜单" aria-expanded="false">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -165,7 +168,7 @@ const isHomePage = currentPath === '/' || currentPath === '';
   .header-right {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.85rem;
   }
 
   .nav-links {
