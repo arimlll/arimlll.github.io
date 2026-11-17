@@ -6,6 +6,7 @@ import FontSizeControl from '@/components/FontSizeControl.astro';
 
 interface Props {
   title: string;
+  titleRuby?: string;
   description: string;
   pubDate: Date;
   updatedDate?: Date;
@@ -15,7 +16,7 @@ interface Props {
   wordCount?: number;
 }
 
-const { title, description, pubDate, updatedDate, tags = [], lang = 'zh', source, wordCount } = Astro.props;
+const { title, titleRuby, description, pubDate, updatedDate, tags = [], lang = 'zh', source, wordCount } = Astro.props;
 
 const dateLocale = lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'zh-CN';
 const formattedPubDate = pubDate.toLocaleDateString(dateLocale, {
@@ -48,7 +49,7 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? 'ши
 
   <article class="post animate-fade-in" lang={lang}>
     <header class="post-header">
-      <h1 class="post-title">{title}</h1>
+      <h1 class="post-title" set:html={titleRuby || title} />
       <div class="post-meta">
         <span class="meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -304,8 +305,20 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? 'ши
     font-size: 2.25rem;
     font-weight: 800;
     margin-bottom: 0.75rem;
-    line-height: 1.3;
+    line-height: 1.6;
     letter-spacing: -0.01em;
+    padding-top: 0.35rem;
+  }
+
+  .post-title ruby {
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 640px) {
+    .post-title {
+      font-size: 1.65rem;
+      line-height: 1.55;
+    }
   }
 
   .post-meta {

@@ -67,6 +67,7 @@ const { tag, group, posts } = Astro.props;
     {posts.map((post: any) => (
       <PostCard
         title={post.data.title}
+        titleRuby={post.data.titleRuby}
         description={post.data.description}
         pubDate={post.data.pubDate.toISOString()}
         slug={post.slug || post.id}

@@ -1,6 +1,7 @@
 ---
 interface Props {
   title: string;
+  titleRuby?: string;
   description: string;
   pubDate: string;
   slug: string;
@@ -9,7 +10,7 @@ interface Props {
   lang?: string;
 }
 
-const { title, description, pubDate, slug, tags = [], wordCount, lang = 'zh' } = Astro.props;
+const { title, titleRuby, description, pubDate, slug, tags = [], wordCount, lang = 'zh' } = Astro.props;
 const date = new Date(pubDate);
 const locale = lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'zh-CN';
 const formattedDate = date.toLocaleDateString(locale, {
@@ -24,7 +25,7 @@ const minText = lang === 'en' ? `~${readingTime} min` : lang === 'ja' ? `約 ${r
 ---
 <article class="post-card" data-post-lang={lang}>
   <a href={`/blog/${slug}/`} class="post-card-link">
-    <h3 class="post-card-title">{title}</h3>
+    <h3 class="post-card-title" set:html={titleRuby || title} />
     <p class="post-card-desc">{description}</p>
     <div class="post-card-meta">
       <time datetime={date.toISOString()} class="meta-date">{formattedDate}</time>
@@ -79,7 +80,11 @@ const minText = lang === 'en' ? `~${readingTime} min` : lang === 'ja' ? `約 ${r
     margin-bottom: 0.55rem;
     color: var(--color-text);
     transition: color 0.2s;
-    line-height: 1.4;
+    line-height: 1.55;
+  }
+
+  .post-card-title ruby {
+    letter-spacing: 0;
   }
 
   .post-card:hover .post-card-title {
