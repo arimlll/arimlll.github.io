@@ -319,6 +319,14 @@ blockquote p {
   display: none !important;
 }
 
+/* ===== Japanese Typography ===== */
+:lang(ja),
+[lang="ja"],
+.post[lang="ja"],
+.post[lang="ja"] .prose {
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+}
+
 /* ===== Japanese Vertical Layout (縦書き) ===== */
 .post[lang="ja"] .prose:not(.horizontal-mode) {
   writing-mode: vertical-rl;
@@ -430,17 +438,21 @@ blockquote p {
   }
 }
 
-/* ===== Ruby Typography ===== */
+/* ===== Ruby Typography (ルビ組版) ===== */
 ruby {
-  ruby-align: space-around;
+  ruby-align: center;
   ruby-position: over;
+  -webkit-ruby-position: before;
+  letter-spacing: 0;
 }
 
 rt {
-  font-size: 0.52em;
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  font-size: 0.5em;
   line-height: 1;
   font-weight: 400;
   letter-spacing: 0;
+  text-align: center;
   color: var(--color-text-secondary);
   user-select: none;
 }
