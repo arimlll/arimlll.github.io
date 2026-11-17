@@ -19,15 +19,9 @@ const postsWithWordCount = await Promise.all(
 ---
 <BaseLayout title="首页">
   <section class="hero animate-fade-in">
-    <div class="hero-badge">Welcome</div>
-    <h1 class="hero-title">Ariml<span class="hero-dot">.</span></h1>
+    <h1 class="hero-title" id="hero-title">Ariml<span class="hero-dot">.</span></h1>
     <p class="hero-quote">「黄河长江不会倒流」</p>
     <p class="hero-sub">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · 法律与生活思考</p>
-    <div class="hero-extra-links">
-      <span>更多站点：</span>
-      <a href="/jkfz187/" class="hero-chip">jkfz187</a>
-      <a href="/jkfz187/czp/" class="hero-chip">一些蠢小说</a>
-    </div>
   </section>
 
   {posts.length > 0 && (
@@ -55,24 +49,10 @@ const postsWithWordCount = await Promise.all(
 <style>
   .hero {
     text-align: center;
-    padding: 3.5rem 0 2.5rem;
+    padding: 3.5rem 0 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  .hero-badge {
-    display: inline-block;
-    padding: 0.2rem 0.75rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-tag-text);
-    background-color: var(--color-tag-bg);
-    border-radius: 999px;
-    margin-bottom: 1rem;
-    border: 1px solid var(--color-border);
   }
 
   .hero-title {
@@ -103,34 +83,6 @@ const postsWithWordCount = await Promise.all(
     color: var(--color-accent-text);
     text-decoration: underline;
     text-underline-offset: 3px;
-  }
-
-  .hero-extra-links {
-    margin-top: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .hero-chip {
-    display: inline-block;
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    padding: 0.2rem 0.65rem;
-    border-radius: 6px;
-    color: var(--color-text);
-    font-size: 0.85rem;
-    transition: all 0.2s;
-  }
-
-  .hero-chip:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent-text);
-    transform: translateY(-1px);
   }
 
   .recent-posts {

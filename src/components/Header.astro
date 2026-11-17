@@ -15,10 +15,21 @@ function isLinkActive(linkHref: string, path: string): boolean {
   if (linkHref === '/') return path === '/' || path === '';
   return path.startsWith(linkHref);
 }
+
+const isHomePage = currentPath === '/' || currentPath === '';
 ---
 <header class="header">
   <nav class="header-inner container">
-    <Logo />
+    <div
+      class:list={[
+        'header-logo-container',
+        { 'home-scroll-logo': isHomePage }
+      ]}
+      id="header-logo-container"
+    >
+      <Logo />
+    </div>
+
     <div class="header-right">
       <div class="nav-links" id="nav-links">
         {navLinks.map(link => (
@@ -72,8 +83,41 @@ function isLinkActive(linkHref: string, path: string): boolean {
     });
   }
 
+  function initHeaderLogoScroll() {
+    const logoContainer = document.getElementById('header-logo-container');
+    if (!logoContainer) return;
+
+    const heroTitle = document.getElementById('hero-title');
+    if (!heroTitle) {
+      // Non-home page: always display logo
+      logoContainer.classList.remove('home-scroll-logo');
+      return;
+    }
+
+    const header = document.querySelector('.header');
+    const headerHeight = header ? header.clientHeight : 60;
+
+    function handleScroll() {
+      const rect = heroTitle!.getBoundingClientRect();
+      // When navbar reaches/covers Ariml title, reveal navbar logo
+      if (rect.top <= headerHeight) {
+        logoContainer!.classList.add('logo-revealed');
+      } else {
+        logoContainer!.classList.remove('logo-revealed');
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    handleScroll();
+  }
+
   initMenu();
-  document.addEventListener('astro:after-swap', initMenu);
+  initHeaderLogoScroll();
+  document.addEventListener('astro:after-swap', () => {
+    initMenu();
+    initHeaderLogoScroll();
+  });
 </script>
 
 <style>
@@ -96,6 +140,25 @@ function isLinkActive(linkHref: string, path: string): boolean {
     justify-content: space-between;
     height: 100%;
     max-width: var(--max-width);
+  }
+
+  .header-logo-container {
+    display: flex;
+    align-items: center;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* When on home page, hide logo until Ariml header is covered by navbar */
+  .header-logo-container.home-scroll-logo {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(4px);
+  }
+
+  .header-logo-container.home-scroll-logo.logo-revealed {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .header-right {
