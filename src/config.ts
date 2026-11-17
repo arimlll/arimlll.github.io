@@ -9,21 +9,26 @@ export const SITE = {
 };
 
 /**
- * Waline 免登录评论与留言墙系统配置
+ * Cusdis 零运维免登录评论与留言墙系统配置（推荐）
  *
- * 只要在此处填入部署好的 Waline 服务端地址（如 Vercel / Zeabur / Cloudflare 等）：
- * 示例: serverURL: 'https://waline-ariml.vercel.app'
- *
- * 填入后，全站所有文章的【评论区】与【留言墙】将全部自动生效，访客均可免登录直接发言！
+ * 官方云托管，永久免费，无需云服务器、无需数据库、免绑信用卡。
+ * 前往 https://cusdis.com 使用 GitHub 登录，点击 "Add App"，
+ * 将生成的 APP ID 填入下方 appId 中即可全站一键激活！
+ */
+export const CUSDIS_CONFIG = {
+  // 从 cusdis.com 获取的 App ID（例如: "d4f6a7b8-xxxx-xxxx-xxxx-xxxxxxxxxxxx"）
+  appId: '',
+  host: 'https://cusdis.com',
+};
+
+/**
+ * Waline 备用配置
  */
 export const WALINE_CONFIG = {
-  // 服务端地址（部署好后填入即可）
   serverURL: '',
-  // 表情包配置
   emoji: [
     '//unpkg.com/@waline/emojis@1.2.0/weibo',
     '//unpkg.com/@waline/emojis@1.2.0/bilibili',
   ],
-  // 必须填写的项：仅需输入昵称，无需邮箱与个人网站，彻底免登录
   requiredMeta: ['nick'],
 };

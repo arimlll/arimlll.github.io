@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import TagList from '@/components/TagList.astro';
-import Waline from '@/components/Waline.astro';
+import Cusdis from '@/components/Cusdis.astro';
 
 interface Props {
   title: string;
@@ -102,7 +102,7 @@ const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
 
     <section class="comments-section">
       <h2 class="comments-title">评论</h2>
-      <Waline path={Astro.url.pathname} />
+      <Cusdis pageId={Astro.url.pathname} pageTitle={title} pageUrl={Astro.url.href} />
     </section>
   </article>
 
