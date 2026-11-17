@@ -1,14 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Cusdis from '@/components/Cusdis.astro';
+import Giscus from '@/components/Giscus.astro';
 ---
-<BaseLayout title="留言墙" description="雁过留痕，风过留声。欢迎在留言墙留下你的想法与足迹，无需登录。">
+<BaseLayout title="留言墙" description="雁过留痕，风过留声。欢迎在留言墙留下你的想法与足迹。">
   <div class="page-header animate-fade-in">
     <h1 class="page-title">留言墙</h1>
-    <p class="page-desc">雁过留痕，风过留声。欢迎在此畅所欲言，任何人均可免登录直接留言。</p>
+    <p class="page-desc">雁过留痕，风过留声。欢迎在此畅所欲言、交流讨论。</p>
   </div>
 
-  <Cusdis pageId="guestbook" pageTitle="留言墙" isGuestbook={true} />
+  <Giscus isGuestbook={true} />
 </BaseLayout>
 
 <style>

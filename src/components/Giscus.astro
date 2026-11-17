@@ -1,0 +1,138 @@
+---
+import { GISCUS_CONFIG } from '@/config';
+
+/**
+ * Giscus 评论与留言组件
+ * 基于 GitHub Discussions，完全免费、零服务器、零维护成本、永久可靠。
+ */
+
+interface Props {
+  lang?: string;
+  isGuestbook?: boolean;
+}
+
+const { lang = 'zh-CN', isGuestbook = false } = Astro.props;
+
+const REPO = GISCUS_CONFIG.repo;
+const REPO_ID = GISCUS_CONFIG.repoId;
+const CATEGORY = GISCUS_CONFIG.category;
+const CATEGORY_ID = GISCUS_CONFIG.categoryId;
+---
+<div id="giscus-container" class:list={['giscus-wrapper', { 'guestbook-mode': isGuestbook }]}></div>
+
+<!-- Toast 提示 -->
+<div id="toast" class="toast">
+  <span id="toast-message"></span>
+</div>
+
+<script define:vars={{ REPO, REPO_ID, CATEGORY, CATEGORY_ID, lang }}>
+  function getGiscusTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDark ? 'noborder_dark' : 'light';
+  }
+
+  function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container || !REPO_ID || !CATEGORY_ID) return;
+
+    container.replaceChildren();
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', REPO);
+    script.setAttribute('data-repo-id', REPO_ID);
+    script.setAttribute('data-category', CATEGORY);
+    script.setAttribute('data-category-id', CATEGORY_ID);
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', getGiscusTheme());
+    script.setAttribute('data-lang', lang);
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    container.appendChild(script);
+  }
+
+  function onThemeChange(e) {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      const theme = e.detail?.theme === 'dark' ? 'noborder_dark' : 'light';
+      iframe.contentWindow.postMessage(
+        { giscus: { setConfig: { theme } } },
+        'https://giscus.app'
+      );
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
+    if (!toast || !toastMessage) return;
+    
+    toastMessage.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  // 监听 Giscus 消息通知
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://giscus.app') return;
+    
+    const { data } = event;
+    if (typeof data === 'object' && data.giscus) {
+      if (data.giscus.discussion && data.giscus.discussion.url) {
+        showToast('发布成功！');
+      }
+    }
+  });
+
+  loadGiscus();
+  window.addEventListener('theme-change', onThemeChange);
+  document.addEventListener('astro:after-swap', loadGiscus);
+</script>
+
+<style>
+  .giscus-wrapper {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .giscus-wrapper.guestbook-mode {
+    margin-top: 1rem;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--color-accent);
+    color: #1a1a1a;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  [data-theme="dark"] .toast {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+</style>
