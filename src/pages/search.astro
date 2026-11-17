@@ -7,13 +7,16 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .map(post => ({
     title: post.data.title,
     description: post.data.description,
-    slug: post.slug,
-    tags: post.data.tags,
+    slug: post.slug || post.id,
+    tags: post.data.tags || [],
     pubDate: post.data.pubDate.toISOString(),
   }));
 ---
-<BaseLayout title="搜索" description="搜索博客文章">
-  <h1 class="page-title">搜索</h1>
+<BaseLayout title="搜索" description="搜索博客文章，按标题、描述或标签查找。">
+  <div class="page-header">
+    <h1 class="page-title">搜索文章</h1>
+    <p class="page-desc">按标题、摘要或标签实时检索全站文章</p>
+  </div>
 
   <div class="search-box">
     <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -23,13 +26,27 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     <input
       type="search"
       id="search-input"
-      placeholder="输入关键词搜索..."
+      placeholder="输入关键词搜索（快捷键 / 聚焦）..."
       autocomplete="off"
     />
+    <button id="search-clear" class="search-clear" aria-label="清空搜索" style="display:none;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
   </div>
 
+  <div id="search-count" class="search-count" style="display:none;"></div>
   <div id="search-results" class="search-results"></div>
-  <p id="search-empty" class="search-empty" style="display:none;">没有找到相关文章</p>
+  <div id="search-empty" class="search-empty" style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      <line x1="8" y1="11" x2="14" y2="11"></line>
+    </svg>
+    <p>没有找到相关文章，请尝试更换关键词</p>
+  </div>
 
   <script define:vars={{ posts }}>
     window.__searchPosts = posts;
@@ -40,29 +57,46 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
     function initSearch() {
       const input = document.getElementById('search-input') as HTMLInputElement;
-      const resultsContainer = document.getElementById('search-results')!;
-      const emptyMsg = document.getElementById('search-empty')!;
+      const clearBtn = document.getElementById('search-clear') as HTMLButtonElement;
+      const countEl = document.getElementById('search-count');
+      const resultsContainer = document.getElementById('search-results');
+      const emptyMsg = document.getElementById('search-empty');
 
-      if (!input) return;
+      if (!input || !resultsContainer || !emptyMsg) return;
 
       const posts = (window as any).__searchPosts || [];
       const fuse = new Fuse(posts, {
-        keys: ['title', 'description', 'tags'],
-        threshold: 0.3,
+        keys: [
+          { name: 'title', weight: 0.5 },
+          { name: 'tags', weight: 0.3 },
+          { name: 'description', weight: 0.2 },
+        ],
+        threshold: 0.35,
         includeScore: true,
       });
 
-      input.addEventListener('input', () => {
-        const query = input.value.trim();
-        resultsContainer.innerHTML = '';
-        emptyMsg.style.display = 'none';
+      function performSearch(query: string) {
+        resultsContainer!.innerHTML = '';
+        emptyMsg!.style.display = 'none';
 
-        if (!query) return;
+        if (clearBtn) {
+          clearBtn.style.display = query ? 'flex' : 'none';
+        }
+
+        if (!query) {
+          if (countEl) countEl.style.display = 'none';
+          return;
+        }
 
         const results = fuse.search(query);
 
+        if (countEl) {
+          countEl.style.display = 'block';
+          countEl.textContent = `找到 ${results.length} 篇相关文章`;
+        }
+
         if (results.length === 0) {
-          emptyMsg.style.display = 'block';
+          emptyMsg!.style.display = 'block';
           return;
         }
 
@@ -70,17 +104,69 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
           const date = new Date(item.pubDate).toLocaleDateString('zh-CN', {
             year: 'numeric', month: 'long', day: 'numeric',
           });
+
+          const tagsHtml = (item.tags || [])
+            .map((t: string) => `<span class="result-tag">#${t}</span>`)
+            .join('');
+
           const el = document.createElement('a');
           el.href = `/blog/${item.slug}/`;
           el.className = 'search-result-item';
           el.innerHTML = `
             <h3>${item.title}</h3>
             <p>${item.description}</p>
-            <span class="result-date">${date}</span>
+            <div class="result-meta">
+              <span class="result-date">${date}</span>
+              ${tagsHtml ? `<div class="result-tags">${tagsHtml}</div>` : ''}
+            </div>
           `;
-          resultsContainer.appendChild(el);
+          resultsContainer!.appendChild(el);
         });
+      }
+
+      // Input handler
+      input.addEventListener('input', () => {
+        const val = input.value.trim();
+        performSearch(val);
+        const url = new URL(window.location.href);
+        if (val) {
+          url.searchParams.set('q', val);
+        } else {
+          url.searchParams.delete('q');
+        }
+        window.history.replaceState({}, '', url.toString());
       });
+
+      // Clear button
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          input.value = '';
+          input.focus();
+          performSearch('');
+          const url = new URL(window.location.href);
+          url.searchParams.delete('q');
+          window.history.replaceState({}, '', url.toString());
+        });
+      }
+
+      // Shortcut: press '/' to focus, 'Escape' to clear
+      document.addEventListener('keydown', (e) => {
+        if (e.key === '/' && document.activeElement !== input) {
+          e.preventDefault();
+          input.focus();
+        } else if (e.key === 'Escape' && document.activeElement === input) {
+          input.value = '';
+          performSearch('');
+          input.blur();
+        }
+      });
+
+      // Initial query from URL
+      const initialQuery = new URLSearchParams(window.location.search).get('q');
+      if (initialQuery) {
+        input.value = initialQuery;
+        performSearch(initialQuery.trim());
+      }
     }
 
     initSearch();
@@ -89,19 +175,31 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 </BaseLayout>
 
 <style>
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
   .page-title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .page-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
   }
 
   .search-box {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .search-icon {
     position: absolute;
-    left: 1rem;
+    left: 1.1rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-text-secondary);
@@ -110,62 +208,127 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
 
   #search-input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    padding: 0.85rem 2.85rem 0.85rem 2.9rem;
     font-size: 1rem;
     font-family: var(--font-body);
     background-color: var(--color-card-bg);
     color: var(--color-text);
     border: 1px solid var(--color-border);
-    border-radius: 10px;
+    border-radius: 12px;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
   }
 
   #search-input:focus {
     border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(248, 200, 34, 0.2);
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+
+  .search-clear:hover {
+    color: var(--color-text);
+  }
+
+  .search-count {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
   }
 
   .search-results {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.85rem;
   }
 
   .search-results :global(.search-result-item) {
     display: block;
-    padding: 1rem 1.25rem;
+    padding: 1.25rem 1.5rem;
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-border);
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
   }
 
   .search-results :global(.search-result-item:hover) {
     border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
 
   .search-results :global(.search-result-item h3) {
-    font-size: 1.05rem;
-    margin-bottom: 0.3rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
     color: var(--color-text);
+    transition: color 0.2s;
+  }
+
+  .search-results :global(.search-result-item:hover h3) {
+    color: var(--color-accent-text);
   }
 
   .search-results :global(.search-result-item p) {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--color-text-secondary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.5;
   }
 
-  .search-results :global(.result-date) {
+  .search-results :global(.result-meta) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 0.8rem;
     color: var(--color-text-secondary);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .search-results :global(.result-tags) {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .search-results :global(.result-tag) {
+    background-color: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    padding: 0.1rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
   }
 
   .search-empty {
     color: var(--color-text-secondary);
     text-align: center;
-    padding: 2rem;
+    padding: 3rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .empty-icon {
+    opacity: 0.4;
   }
 </style>

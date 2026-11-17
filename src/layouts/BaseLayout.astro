@@ -16,26 +16,38 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const rssURL = new URL('/rss.xml', Astro.site).href;
+const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} | 啊睿猫`;
 ---
 <!doctype html>
-<html lang="zh">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} | Ariml</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" href="/icon.ico" />
-    <link rel="alternate" type="application/rss+xml" title="Ariml's Blog" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="啊睿猫 | Ariml's Blog" href={rssURL} />
+
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={`${title} | Ariml`} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(ogImage, Astro.site)} />
 
-    <!-- Theme initialization (must be synchronous to prevent flash) -->
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+
+    <!-- Theme initialization (synchronous to prevent flash) -->
     <script is:inline>
       (function() {
         const stored = localStorage.getItem('theme');
@@ -47,7 +59,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
           document.documentElement.setAttribute('data-theme', 'light');
         }
         
-        // 监听系统主题变化（仅在用户未手动设置时）
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
           if (!localStorage.getItem('theme')) {
             document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');

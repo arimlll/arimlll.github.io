@@ -1,17 +1,17 @@
 ---
 import PostLayout from '@/layouts/PostLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.slug || post.id },
     props: post,
   }));
 }
 
 const post = Astro.props;
-const { Content, remarkPluginFrontmatter } = await post.render();
+const { Content, remarkPluginFrontmatter } = await render(post);
 const wordCount = remarkPluginFrontmatter?.wordCount;
 ---
 <PostLayout

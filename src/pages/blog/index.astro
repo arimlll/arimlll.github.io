@@ -1,14 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 const postsWithWordCount = await Promise.all(
   posts
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
     .map(async (post) => {
-      const { remarkPluginFrontmatter } = await post.render();
+      const { remarkPluginFrontmatter } = await render(post);
       return {
         ...post,
         wordCount: remarkPluginFrontmatter?.wordCount,
@@ -16,9 +16,11 @@ const postsWithWordCount = await Promise.all(
     })
 );
 ---
-<BaseLayout title="博客" description="Ariml 的所有博客文章">
-  <h1 class="page-title">博客</h1>
-  <p class="page-desc">共 {posts.length} 篇文章</p>
+<BaseLayout title="博客" description="Ariml 的所有博客文章，探讨法律与生活。">
+  <div class="page-header">
+    <h1 class="page-title">博客文章</h1>
+    <p class="page-desc">共 {posts.length} 篇文章，记录法律思辨与生活观察</p>
+  </div>
 
   <div class="post-list">
     {postsWithWordCount.map(post => (
@@ -26,7 +28,7 @@ const postsWithWordCount = await Promise.all(
         title={post.data.title}
         description={post.data.description}
         pubDate={post.data.pubDate.toISOString()}
-        slug={post.slug}
+        slug={post.slug || post.id}
         tags={post.data.tags}
         wordCount={post.wordCount}
       />
@@ -35,15 +37,21 @@ const postsWithWordCount = await Promise.all(
 </BaseLayout>
 
 <style>
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
   .page-title {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
   }
 
   .page-desc {
     color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
   }
 
   .post-list {

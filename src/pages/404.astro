@@ -2,33 +2,87 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 ---
 <BaseLayout title="404 - 页面未找到">
-  <div class="not-found">
-    <h1>404</h1>
-    <p>页面未找到</p>
-    <a href="/" class="home-link">返回首页 &rarr;</a>
+  <div class="not-found animate-fade-in">
+    <div class="error-code">404</div>
+    <h1 class="error-title">抱歉，您访问的页面不存在</h1>
+    <p class="error-desc">该页面可能已被移动、删除，或输入的链接地址有误。</p>
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">返回首页</a>
+      <a href="/blog/" class="btn btn-secondary">浏览所有文章</a>
+    </div>
   </div>
 </BaseLayout>
 
 <style>
   .not-found {
     text-align: center;
-    padding: 6rem 0;
+    padding: 5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .not-found h1 {
-    font-size: 5rem;
+  .error-code {
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
     color: var(--color-accent);
-    margin-bottom: 0.5rem;
+    letter-spacing: -0.05em;
+    margin-bottom: 1rem;
   }
 
-  .not-found p {
+  .error-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .error-desc {
     color: var(--color-text-secondary);
-    font-size: 1.25rem;
+    font-size: 1rem;
+    max-width: 420px;
     margin-bottom: 2rem;
+    line-height: 1.6;
   }
 
-  .home-link {
-    font-size: 1rem;
-    color: var(--color-accent);
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.4rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #1a1a1a;
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-text);
+    transform: translateY(-1px);
   }
 </style>

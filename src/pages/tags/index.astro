@@ -11,14 +11,16 @@ posts.forEach(post => {
 });
 const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
 ---
-<BaseLayout title="标签" description="按标签浏览文章">
-  <h1 class="page-title">标签</h1>
-  <p class="page-desc">共 {sortedTags.length} 个标签</p>
+<BaseLayout title="标签" description="按文章标签分类浏览，快速查找感兴趣的话题。">
+  <div class="page-header">
+    <h1 class="page-title">标签归档</h1>
+    <p class="page-desc">全站共 {sortedTags.length} 个分类标签，点击即可浏览相关主题文章</p>
+  </div>
 
   <div class="tag-cloud">
     {sortedTags.map(([tag, count]) => (
       <a href={`/tags/${tag}/`} class="tag-item">
-        {tag}
+        <span class="tag-name">#{tag}</span>
         <span class="tag-count">{count}</span>
       </a>
     ))}
@@ -26,48 +28,56 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
 </BaseLayout>
 
 <style>
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
   .page-title {
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
   }
 
   .page-desc {
     color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 2rem;
+    font-size: 0.95rem;
   }
 
   .tag-cloud {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.85rem;
   }
 
   .tag-item {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-border);
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
     color: var(--color-text);
     text-decoration: none;
-    transition: border-color 0.2s, transform 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   }
 
   .tag-item:hover {
     border-color: var(--color-accent);
-    color: var(--color-text);
-    transform: translateY(-1px);
+    color: var(--color-accent-text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   }
 
   .tag-count {
     background-color: var(--color-tag-bg);
     color: var(--color-tag-text);
-    padding: 0.1rem 0.45rem;
-    border-radius: 4px;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
     font-size: 0.75rem;
     font-weight: 600;
   }
