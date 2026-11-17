@@ -15,11 +15,14 @@
   --color-tag-bg: #fef8db;
   --color-tag-text: #7a5c00;
   --color-header-bg: rgba(245, 245, 247, 0.88);
+  --scrollbar-thumb: var(--color-border);
+  --scrollbar-track: transparent;
   --font-body: 'Inter', 'Noto Serif SC', 'Noto Serif JP', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --font-serif: 'Noto Serif SC', 'Noto Serif JP', 'STZhongsong', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
   --max-width: 740px;
   --header-height: 60px;
+  color-scheme: light dark;
 }
 
 [data-theme="dark"] {
@@ -35,6 +38,13 @@
   --color-tag-bg: #2b2814;
   --color-tag-text: #f0d060;
   --color-header-bg: rgba(19, 20, 31, 0.88);
+  --scrollbar-thumb: var(--color-border);
+  --scrollbar-track: transparent;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
 }
 
 /* ===== Reset ===== */
@@ -52,6 +62,8 @@ html {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
 }
 
 body {
@@ -233,23 +245,22 @@ blockquote p {
   font-weight: 700;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+/* Fallback for older browsers without standard scrollbar properties */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+  }
 }
 
 /* ===== Animations ===== */

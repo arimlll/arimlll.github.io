@@ -26,6 +26,12 @@
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
+
+      const meta = document.querySelector('meta[name="color-scheme"]');
+      if (meta) {
+        meta.setAttribute('content', next);
+      }
+
       window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: next } }));
     });
   }
