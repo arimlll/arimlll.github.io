@@ -314,3 +314,129 @@ blockquote p {
 [data-lang="ja"] [data-post-lang]:not([data-post-lang="ja"]) {
   display: none !important;
 }
+
+/* ===== Japanese Vertical Layout (縦書き) ===== */
+.post[lang="ja"] .prose:not(.horizontal-mode) {
+  writing-mode: vertical-rl;
+  -webkit-writing-mode: vertical-rl;
+  -ms-writing-mode: tb-rl;
+  text-orientation: mixed;
+  font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  height: 560px;
+  max-height: 72vh;
+  min-height: 440px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  padding: 2.2rem 2.4rem;
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  line-height: 2.3;
+  letter-spacing: 0.06em;
+  margin: 1.2rem 0 2rem;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) p {
+  text-indent: 1em;
+  margin-left: 2em;
+  margin-bottom: 0;
+  margin-top: 0;
+  line-height: 2.3;
+  word-break: break-all;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 1.6em 0 2.2em;
+  padding: 0 0 0 0.5em;
+  border-bottom: none;
+  border-left: 2px solid var(--color-accent);
+  letter-spacing: 0.08em;
+  height: auto;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 1.2em 0 1.8em;
+  padding: 0 0 0 0.4em;
+  border-bottom: none;
+  border-left: 1px dashed var(--color-border);
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) blockquote {
+  border-left: none;
+  border-right: 3px solid var(--color-accent);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 6px 0 0 6px;
+  padding: 1.2em 1em;
+  margin: 0 1.8em;
+  background-color: rgba(248, 200, 34, 0.04);
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) blockquote p {
+  text-indent: 0 !important;
+  margin-left: 0;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) ul,
+.post[lang="ja"] .prose:not(.horizontal-mode) ol {
+  padding-top: 1.2em;
+  padding-left: 0;
+  margin: 0 1.6em;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) li {
+  margin-bottom: 0;
+  margin-left: 0.8em;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) pre {
+  writing-mode: horizontal-tb;
+  direction: ltr;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 1.8em;
+  max-height: 440px;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.post[lang="ja"] .prose:not(.horizontal-mode) hr {
+  border: none;
+  border-left: 1px solid var(--color-border);
+  height: 100%;
+  margin: 0 2em;
+}
+
+@media (max-width: 640px) {
+  .post[lang="ja"] .prose:not(.horizontal-mode) {
+    height: 480px;
+    padding: 1.5rem 1.4rem;
+    line-height: 2.1;
+  }
+}
+
+/* ===== Ruby Typography ===== */
+ruby {
+  ruby-align: space-around;
+  ruby-position: over;
+}
+
+rt {
+  font-size: 0.52em;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-text-secondary);
+  user-select: none;
+}

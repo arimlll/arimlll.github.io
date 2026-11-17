@@ -95,6 +95,21 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
 
     <hr class="post-divider" />
 
+    {lang === 'ja' && (
+      <div class="tategaki-toolbar">
+        <span class="tategaki-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          縦書き（右から左へスクロール）
+        </span>
+        <button class="tategaki-toggle-btn" id="tategaki-toggle" type="button" aria-label="縦書き・横書き切替">
+          <span id="tategaki-mode-label">横書きで読む</span>
+        </button>
+      </div>
+    )}
+
     <div class="prose" id="article-prose">
       <slot />
     </div>
@@ -168,6 +183,43 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
+
+    // Japanese Vertical Layout (縦書き) enhancements
+    const prose = document.querySelector<HTMLElement>('.post[lang="ja"] .prose');
+    const toggleBtn = document.getElementById('tategaki-toggle');
+    const label = document.getElementById('tategaki-mode-label');
+
+    if (prose) {
+      function scrollToStart() {
+        if (!prose || prose.classList.contains('horizontal-mode')) return;
+        prose.scrollLeft = prose.scrollWidth;
+      }
+
+      scrollToStart();
+
+      prose.addEventListener('wheel', (e: WheelEvent) => {
+        if (prose.classList.contains('horizontal-mode')) return;
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          e.preventDefault();
+          prose.scrollBy({
+            left: -e.deltaY * 1.5,
+            behavior: 'auto',
+          });
+        }
+      }, { passive: false });
+
+      if (toggleBtn && label) {
+        toggleBtn.addEventListener('click', () => {
+          const isHorizontal = prose.classList.toggle('horizontal-mode');
+          if (isHorizontal) {
+            label.textContent = '縦書きで読む';
+          } else {
+            label.textContent = '横書きで読む';
+            scrollToStart();
+          }
+        });
+      }
+    }
   }
 
   setupArticleEnhancements();
@@ -175,6 +227,44 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
 </script>
 
 <style>
+  .tategaki-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 0.95rem;
+    background-color: var(--color-tag-bg);
+    border: 1px solid var(--color-tag-border);
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    font-size: 0.85rem;
+  }
+
+  .tategaki-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--color-tag-text);
+    font-weight: 500;
+    font-size: 0.82rem;
+  }
+
+  .tategaki-toggle-btn {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: 6px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tategaki-toggle-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+
   .post-nav {
     margin-bottom: 1.5rem;
   }
