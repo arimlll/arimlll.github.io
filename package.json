@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
     "@astrojs/sitemap": "^3.7.0",
+    "@waline/client": "^3.16.2",
     "astro": "^5.18.0",
     "fuse.js": "^7.1.0",
     "markdown-it": "^14.1.1",

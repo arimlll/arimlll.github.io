@@ -1,0 +1,169 @@
+---
+interface Props {
+  serverURL?: string;
+  path?: string;
+}
+
+const {
+  serverURL = '',
+  path = '/guestbook/',
+} = Astro.props;
+---
+<div class="waline-container">
+  {serverURL ? (
+    <div id="waline" data-server-url={serverURL} data-path={path}></div>
+  ) : (
+    <div class="waline-setup-card">
+      <div class="setup-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <h3>留言墙已就绪（支持免登录）</h3>
+      <p>留言墙前端组件已完全搭建完成。因为 GitHub Pages 为静态托管，无需登录的留言功能需要连接一个免费的后端存储服务。</p>
+      <div class="setup-steps">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <div>
+            <strong>推荐方式一：Waline（最丰富）</strong>
+            <p>免登录、支持表情包与邮件通知。可在 <a href="https://waline.js.org/guide/get-started/" target="_blank" rel="noopener">Waline 官网</a> 点击 <strong>Vercel / Cloudflare 一键免费部署</strong>，随后将生成的服务地址填入即可。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <div>
+            <strong>推荐方式二：Cusdis（极简零运维）</strong>
+            <p>无需自己搭建服务器。在 <a href="https://cusdis.com" target="_blank" rel="noopener">Cusdis.com</a> 免费注册一个 App ID 即可免登录直接接收留言。</p>
+          </div>
+        </div>
+      </div>
+      <p class="setup-tip">💡 如果您已有部署好的后端地址或 App ID，可以直接告诉我，我来帮您一键填入生效！</p>
+    </div>
+  )}
+</div>
+
+{serverURL && (
+  <script>
+    import { init } from '@waline/client';
+    import '@waline/client/style';
+
+    function setupWaline() {
+      const el = document.getElementById('waline');
+      if (!el) return;
+      const serverURL = el.getAttribute('data-server-url');
+      if (!serverURL) return;
+
+      init({
+        el: '#waline',
+        serverURL,
+        path: el.getAttribute('data-path') || window.location.pathname,
+        dark: 'html[data-theme="dark"]',
+        search: false,
+        reaction: true,
+        meta: ['nick', 'mail', 'link'],
+        requiredMeta: ['nick'], // 仅需输入昵称，完全无需登录
+        login: 'disable', // 禁用强制登录，任何人直接发表
+        emoji: [
+          '//unpkg.com/@waline/emojis@1.2.0/weibo',
+          '//unpkg.com/@waline/emojis@1.2.0/bilibili',
+        ],
+        locale: {
+          placeholder: '留下你的足迹（无需登录，输入昵称即可发布）...',
+        },
+      });
+    }
+
+    setupWaline();
+    document.addEventListener('astro:after-swap', setupWaline);
+  </script>
+)}
+
+<style>
+  .waline-container {
+    margin-top: 2rem;
+  }
+
+  .waline-setup-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .setup-icon {
+    display: inline-flex;
+    padding: 0.75rem;
+    background-color: var(--color-tag-bg);
+    color: var(--color-tag-text);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .waline-setup-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .waline-setup-card > p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .step-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: #1a1a1a;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-item strong {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .step-item p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+  }
+
+  .step-item a {
+    color: var(--color-accent-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .setup-tip {
+    font-size: 0.88rem;
+    color: var(--color-accent-text);
+    background-color: var(--color-tag-bg);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+  }
+</style>

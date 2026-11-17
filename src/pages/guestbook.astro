@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Waline from '@/components/Waline.astro';
+
+// 如果有部署好的 Waline 后端（如 Vercel / Cloudflare 等），填入下方即可立即生效：
+// 示例：const WALINE_SERVER_URL = 'https://waline-ariml.vercel.app';
+const WALINE_SERVER_URL = '';
+---
+<BaseLayout title="留言墙" description="雁过留痕，风过留声。欢迎在留言墙留下你的想法与足迹，无需登录。">
+  <div class="page-header animate-fade-in">
+    <h1 class="page-title">留言墙</h1>
+    <p class="page-desc">雁过留痕，风过留声。欢迎在此畅所欲言，任何人均可免登录直接留言。</p>
+  </div>
+
+  <Waline serverURL={WALINE_SERVER_URL} path="/guestbook/" />
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .page-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .page-desc {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+  }
+</style>
