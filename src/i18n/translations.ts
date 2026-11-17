@@ -84,6 +84,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Switchers
     'theme.toggle': '切换明暗主题',
     'lang.select': '切换语言',
+    'font.decrease': '缩小字号 (A-)',
+    'font.increase': '放大字号 (A+)',
+    'font.reset': '恢复默认字号 (100%)',
   },
   en: {
     // Navigation
@@ -155,6 +158,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Switchers
     'theme.toggle': 'Toggle theme',
     'lang.select': 'Change language',
+    'font.decrease': 'Decrease font size (A-)',
+    'font.increase': 'Increase font size (A+)',
+    'font.reset': 'Reset font size (100%)',
   },
   ja: {
     // Navigation
@@ -226,5 +232,8 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Switchers
     'theme.toggle': 'テーマ切替',
     'lang.select': '言語切替',
+    'font.decrease': '文字サイズを小さく (A-)',
+    'font.increase': '文字サイズを大きく (A+)',
+    'font.reset': '標準サイズに戻す (100%)',
   },
 };

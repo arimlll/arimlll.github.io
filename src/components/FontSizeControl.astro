@@ -1,0 +1,199 @@
+---
+---
+<div class="font-size-control" id="font-size-control" role="group" aria-label="字号调节">
+  <button
+    type="button"
+    class="font-btn font-dec-btn"
+    id="font-dec-btn"
+    aria-label="缩小字号"
+    title="缩小字号 (A-)"
+    data-i18n-title="font.decrease"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span class="btn-label-a">A</span>
+  </button>
+  
+  <button
+    type="button"
+    class="font-reset-btn"
+    id="font-reset-btn"
+    aria-label="恢复默认字号"
+    title="恢复默认字号 (100%)"
+    data-i18n-title="font.reset"
+  >
+    <span id="font-size-val">100%</span>
+  </button>
+
+  <button
+    type="button"
+    class="font-btn font-inc-btn"
+    id="font-inc-btn"
+    aria-label="放大字号"
+    title="放大字号 (A+)"
+    data-i18n-title="font.increase"
+  >
+    <span class="btn-label-a">A</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="5" x2="12" y2="19"></line>
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+  </button>
+</div>
+
+<script>
+  const FONT_LEVELS = [88, 100, 115, 130, 145];
+  const DEFAULT_LEVEL = 100;
+
+  function updateFontSizeUI(scale: number) {
+    const valEl = document.getElementById('font-size-val');
+    const decBtn = document.getElementById('font-dec-btn') as HTMLButtonElement | null;
+    const incBtn = document.getElementById('font-inc-btn') as HTMLButtonElement | null;
+    const resetBtn = document.getElementById('font-reset-btn') as HTMLButtonElement | null;
+
+    if (valEl) {
+      valEl.textContent = `${scale}%`;
+    }
+
+    if (decBtn) {
+      const isMin = scale <= FONT_LEVELS[0];
+      decBtn.disabled = isMin;
+      decBtn.classList.toggle('disabled', isMin);
+    }
+
+    if (incBtn) {
+      const isMax = scale >= FONT_LEVELS[FONT_LEVELS.length - 1];
+      incBtn.disabled = isMax;
+      incBtn.classList.toggle('disabled', isMax);
+    }
+
+    if (resetBtn) {
+      resetBtn.classList.toggle('active', scale !== DEFAULT_LEVEL);
+    }
+  }
+
+  function setReadingFontScale(scale: number) {
+    document.documentElement.style.setProperty('--reading-font-scale', (scale / 100).toString());
+    document.documentElement.setAttribute('data-reading-scale', scale.toString());
+    localStorage.setItem('reading-font-scale', scale.toString());
+    updateFontSizeUI(scale);
+  }
+
+  function initFontSizeControl() {
+    const stored = parseInt(localStorage.getItem('reading-font-scale') || '100', 10);
+    const currentScale = FONT_LEVELS.includes(stored) ? stored : DEFAULT_LEVEL;
+    setReadingFontScale(currentScale);
+
+    const decBtn = document.getElementById('font-dec-btn');
+    const incBtn = document.getElementById('font-inc-btn');
+    const resetBtn = document.getElementById('font-reset-btn');
+
+    if (decBtn) {
+      decBtn.onclick = () => {
+        const cur = parseInt(localStorage.getItem('reading-font-scale') || '100', 10);
+        const idx = FONT_LEVELS.indexOf(cur);
+        if (idx > 0) {
+          setReadingFontScale(FONT_LEVELS[idx - 1]);
+        }
+      };
+    }
+
+    if (incBtn) {
+      incBtn.onclick = () => {
+        const cur = parseInt(localStorage.getItem('reading-font-scale') || '100', 10);
+        const idx = FONT_LEVELS.indexOf(cur);
+        if (idx >= 0 && idx < FONT_LEVELS.length - 1) {
+          setReadingFontScale(FONT_LEVELS[idx + 1]);
+        }
+      };
+    }
+
+    if (resetBtn) {
+      resetBtn.onclick = () => {
+        setReadingFontScale(DEFAULT_LEVEL);
+      };
+    }
+  }
+
+  initFontSizeControl();
+  document.addEventListener('astro:after-swap', initFontSizeControl);
+</script>
+
+<style>
+  .font-size-control {
+    display: inline-flex;
+    align-items: center;
+    height: 34px;
+    box-sizing: border-box;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    border-radius: 9px;
+    padding: 2px;
+    gap: 2px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .font-size-control:hover {
+    border-color: var(--color-accent);
+  }
+
+  .font-btn, .font-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 7px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0 0.45rem;
+    height: 28px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    user-select: none;
+  }
+
+  .font-btn:hover:not(:disabled),
+  .font-reset-btn:hover {
+    background-color: var(--color-tag-bg);
+    color: var(--color-accent-text);
+  }
+
+  .font-btn.disabled,
+  .font-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .btn-label-a {
+    font-weight: 700;
+    font-size: 0.82rem;
+    line-height: 1;
+    margin: 0 1px;
+  }
+
+  .font-dec-btn .btn-label-a {
+    font-size: 0.74rem;
+  }
+
+  .font-inc-btn .btn-label-a {
+    font-size: 0.88rem;
+  }
+
+  .font-reset-btn {
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 0 0.4rem;
+    color: var(--color-text);
+    min-width: 44px;
+  }
+
+  .font-reset-btn.active {
+    color: var(--color-accent-text);
+  }
+</style>

@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import TagList from '@/components/TagList.astro';
 import Giscus from '@/components/Giscus.astro';
+import FontSizeControl from '@/components/FontSizeControl.astro';
 
 interface Props {
   title: string;
@@ -42,6 +43,7 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? 'ши
       </svg>
       <span data-i18n="post.backToList">{backToListLabel}</span>
     </a>
+    <FontSizeControl />
   </div>
 
   <article class="post animate-fade-in" lang={lang}>
@@ -266,7 +268,12 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? 'ши
   }
 
   .post-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .back-link {

@@ -79,6 +79,11 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
         }
         document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : lang);
         document.documentElement.setAttribute('data-lang', lang);
+
+        // Reading font scale initialization
+        const storedScale = localStorage.getItem('reading-font-scale') || '100';
+        document.documentElement.style.setProperty('--reading-font-scale', (parseInt(storedScale, 10) / 100).toString());
+        document.documentElement.setAttribute('data-reading-scale', storedScale);
       })();
     </script>
   </head>
