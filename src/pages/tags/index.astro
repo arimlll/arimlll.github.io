@@ -1,15 +1,10 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { getUnifiedTags } from '@/i18n/tags';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
-const tagMap = new Map<string, number>();
-posts.forEach(post => {
-  post.data.tags.forEach(tag => {
-    tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-  });
-});
-const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+const unifiedTags = getUnifiedTags(posts);
 ---
 <BaseLayout title="标签" description="按文章标签分类浏览，快速查找感兴趣的话题。">
   <div class="page-header">
@@ -18,9 +13,16 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
   </div>
 
   <div class="tag-cloud">
-    {sortedTags.map(([tag, count]) => (
-      <a href={`/tags/${tag}/`} class="tag-item">
-        <span class="tag-name">#{tag}</span>
+    {unifiedTags.map(({ group, count }) => (
+      <a
+        href={`/tags/${encodeURIComponent(group.zh)}/`}
+        class="tag-item"
+        data-tag-id={group.id}
+        data-tag-zh={group.zh}
+        data-tag-en={group.en}
+        data-tag-ja={group.ja}
+      >
+        <span class="tag-name">#{group.zh}</span>
         <span class="tag-count">{count}</span>
       </a>
     ))}

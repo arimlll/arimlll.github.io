@@ -40,6 +40,7 @@ import { LANGUAGES } from '@/i18n/translations';
 
 <script>
   import { UI_TRANSLATIONS, type Lang } from '@/i18n/translations';
+  import { getLocalizedTagName } from '@/i18n/tags';
 
   function applyLanguage(lang: Lang) {
     const dict = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.zh;
@@ -94,6 +95,32 @@ import { LANGUAGES } from '@/i18n/translations';
       }
     });
 
+    // 更新统一标签云的名称与链接
+    document.querySelectorAll<HTMLAnchorElement>('.tag-item[data-tag-id]').forEach(link => {
+      const zh = link.getAttribute('data-tag-zh') || '';
+      const en = link.getAttribute('data-tag-en') || '';
+      const ja = link.getAttribute('data-tag-ja') || '';
+      const targetTag = lang === 'en' ? en : lang === 'ja' ? ja : zh;
+      link.href = `/tags/${encodeURIComponent(targetTag)}/`;
+      const nameEl = link.querySelector('.tag-name');
+      if (nameEl) {
+        nameEl.textContent = '#' + targetTag;
+      }
+    });
+
+    // 更新标签详情页标题
+    const tagHeader = document.querySelector<HTMLElement>('.page-header[data-tag-group]');
+    if (tagHeader) {
+      const zh = tagHeader.getAttribute('data-tag-zh') || '';
+      const en = tagHeader.getAttribute('data-tag-en') || '';
+      const ja = tagHeader.getAttribute('data-tag-ja') || '';
+      const targetTag = lang === 'en' ? en : lang === 'ja' ? ja : zh;
+      const titleEl = document.getElementById('tag-page-title');
+      if (titleEl) titleEl.textContent = '#' + targetTag;
+      const descEl = document.getElementById('tag-desc-name');
+      if (descEl) descEl.textContent = '#' + targetTag;
+    }
+
     // 广播语言改变事件
     window.dispatchEvent(new CustomEvent('lang-change', { detail: { lang } }));
   }
@@ -140,6 +167,21 @@ import { LANGUAGES } from '@/i18n/translations';
           }
           if (targetPath !== pathname) {
             window.location.href = targetPath;
+            return;
+          }
+        }
+
+        // If on a tag page, navigate to matching translation of tag
+        const tagMatch = pathname.match(/^\/tags\/([^/]+)\/?$/);
+        if (tagMatch) {
+          const currentTag = decodeURIComponent(tagMatch[1]);
+          const targetTag = getLocalizedTagName(currentTag, targetLang);
+          if (targetTag) {
+            const targetPath = `/tags/${encodeURIComponent(targetTag)}/`;
+            if (targetPath !== pathname) {
+              window.location.href = targetPath;
+              return;
+            }
           }
         }
       });

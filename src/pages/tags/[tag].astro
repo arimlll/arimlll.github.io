@@ -2,12 +2,10 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
 import { getCollection, render } from 'astro:content';
+import { getTagGroup } from '@/i18n/tags';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  const tags = new Set<string>();
-  posts.forEach(post => post.data.tags.forEach(tag => tags.add(tag)));
-
   const postsWithWordCount = await Promise.all(
     posts.map(async (post) => {
       const { remarkPluginFrontmatter } = await render(post);
@@ -18,26 +16,51 @@ export async function getStaticPaths() {
     })
   );
 
-  return [...tags].map(tag => ({
-    params: { tag },
-    props: {
-      tag,
-      posts: postsWithWordCount
-        .filter(post => post.data.tags.includes(tag))
-        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
-    },
-  }));
+  // Group all posts by canonical group ID
+  const groupMap = new Map<string, { group: any; posts: any[] }>();
+
+  postsWithWordCount.forEach(post => {
+    const postTags: string[] = post.data?.tags || [];
+    postTags.forEach(tag => {
+      const group = getTagGroup(tag);
+      if (!groupMap.has(group.id)) {
+        groupMap.set(group.id, { group, posts: [] });
+      }
+      const entry = groupMap.get(group.id)!;
+      if (!entry.posts.some(p => (p.slug || p.id) === (post.slug || post.id))) {
+        entry.posts.push(post);
+      }
+    });
+  });
+
+  const paths: any[] = [];
+  groupMap.forEach(({ group, posts }) => {
+    const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    const aliases = Array.from(new Set([group.zh, group.en, group.ja]));
+    aliases.forEach(alias => {
+      paths.push({
+        params: { tag: alias },
+        props: {
+          tag: alias,
+          group,
+          posts: sortedPosts,
+        },
+      });
+    });
+  });
+
+  return paths;
 }
 
-const { tag, posts } = Astro.props;
+const { tag, group, posts } = Astro.props;
 ---
 <BaseLayout title={`#${tag}`} description={`标签「${tag}」下的所有博客文章`}>
-  <div class="page-header">
+  <div class="page-header" data-tag-group={group.id} data-tag-zh={group.zh} data-tag-en={group.en} data-tag-ja={group.ja}>
     <div class="breadcrumb">
       <a href="/tags/" data-i18n="tags.backToTags">&larr; 返回标签列表</a>
     </div>
-    <h1 class="page-title">#{tag}</h1>
-    <p class="page-desc"><span data-i18n="tags.tagged">标签为</span> #{tag}</p>
+    <h1 class="page-title" id="tag-page-title">#{tag}</h1>
+    <p class="page-desc"><span data-i18n="tags.tagged">标签为</span> <span id="tag-desc-name">#{tag}</span></p>
   </div>
 
   <div class="post-list">
