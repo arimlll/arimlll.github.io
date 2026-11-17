@@ -4,17 +4,15 @@ import PostCard from '@/components/PostCard.astro';
 import { getCollection, render } from 'astro:content';
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const postsWithWordCount = await Promise.all(
-  posts
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-    .slice(0, 5)
-    .map(async (post) => {
-      const { remarkPluginFrontmatter } = await render(post);
-      return {
-        ...post,
-        wordCount: remarkPluginFrontmatter?.wordCount,
-      };
-    })
+  sortedPosts.map(async (post) => {
+    const { remarkPluginFrontmatter } = await render(post);
+    return {
+      ...post,
+      wordCount: remarkPluginFrontmatter?.wordCount,
+    };
+  })
 );
 ---
 <BaseLayout title="首页">
@@ -38,6 +36,7 @@ const postsWithWordCount = await Promise.all(
             slug={post.slug || post.id}
             tags={post.data.tags}
             wordCount={post.wordCount}
+            lang={post.data.lang}
           />
         ))}
       </div>

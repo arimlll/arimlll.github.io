@@ -31,6 +31,7 @@ const postsWithWordCount = await Promise.all(
         slug={post.slug || post.id}
         tags={post.data.tags}
         wordCount={post.wordCount}
+        lang={post.data.lang}
       />
     ))}
   </div>

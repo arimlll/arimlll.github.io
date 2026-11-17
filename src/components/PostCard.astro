@@ -6,18 +6,23 @@ interface Props {
   slug: string;
   tags?: string[];
   wordCount?: number;
+  lang?: string;
 }
 
-const { title, description, pubDate, slug, tags = [], wordCount } = Astro.props;
+const { title, description, pubDate, slug, tags = [], wordCount, lang = 'zh' } = Astro.props;
 const date = new Date(pubDate);
-const formattedDate = date.toLocaleDateString('zh-CN', {
+const locale = lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'zh-CN';
+const formattedDate = date.toLocaleDateString(locale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
 const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
+
+const wordsUnit = lang === 'en' ? 'words' : lang === 'ja' ? '文字' : '字';
+const minText = lang === 'en' ? `~${readingTime} min` : lang === 'ja' ? `約 ${readingTime} 分` : `约 ${readingTime} 分钟`;
 ---
-<article class="post-card">
+<article class="post-card" data-post-lang={lang}>
   <a href={`/blog/${slug}/`} class="post-card-link">
     <h3 class="post-card-title">{title}</h3>
     <p class="post-card-desc">{description}</p>
@@ -25,8 +30,8 @@ const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
       <time datetime={date.toISOString()} class="meta-date">{formattedDate}</time>
       {wordCount && (
         <span class="meta-stats">
-          <span>{wordCount} 字</span>
-          {readingTime && <span>· 约 {readingTime} 分钟</span>}
+          <span>{wordCount} {wordsUnit}</span>
+          {readingTime && <span>· {minText}</span>}
         </span>
       )}
       {tags.length > 0 && (

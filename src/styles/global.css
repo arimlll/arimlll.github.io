@@ -303,3 +303,14 @@ blockquote p {
 .animate-fade-in {
   animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ===== Language-based Post Filtering ===== */
+[data-lang="zh"] [data-post-lang]:not([data-post-lang="zh"]) {
+  display: none !important;
+}
+[data-lang="en"] [data-post-lang]:not([data-post-lang="en"]) {
+  display: none !important;
+}
+[data-lang="ja"] [data-post-lang]:not([data-post-lang="ja"]) {
+  display: none !important;
+}
