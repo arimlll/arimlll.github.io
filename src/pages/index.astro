@@ -20,8 +20,7 @@ const postsWithWordCount = await Promise.all(
 <BaseLayout title="首页">
   <section class="hero animate-fade-in">
     <h1 class="hero-title" id="hero-title">Ariml<span class="hero-dot">.</span></h1>
-    <p class="hero-quote">「黄河长江不会倒流」</p>
-    <p class="hero-sub">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · 法律与生活思考</p>
+    <p class="hero-sub">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · 「黄河长江不会倒流」</p>
   </section>
 
   {posts.length > 0 && (
@@ -67,22 +66,19 @@ const postsWithWordCount = await Promise.all(
     color: var(--color-accent);
   }
 
-  .hero-quote {
-    color: var(--color-text);
-    font-size: 1.15rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
   .hero-sub {
     color: var(--color-text-secondary);
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 
   .hero-link {
     color: var(--color-accent-text);
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .hero-link:hover {
+    color: var(--color-accent-hover);
   }
 
   .recent-posts {

@@ -10,13 +10,13 @@ const siteUrl = 'https://arimlll.github.io';
 <footer class="footer">
   <div class="footer-inner container">
     <div class="footer-left">
-      <p>&copy; {year} Ariml. <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="license-link">AGPL 3.0</a></p>
-      <div class="footer-extra-sites">
-        <span class="label">更多站点：</span>
+      <p class="footer-meta">
+        &copy; {year} Ariml. <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener" class="license-link">AGPL 3.0</a>
+        <span class="sep">·</span>
         <a href="/jkfz187/" class="footer-site-link">jkfz187</a>
         <span class="sep">·</span>
         <a href="/jkfz187/czp/" class="footer-site-link">一些蠢小说</a>
-      </div>
+      </p>
     </div>
     <div class="footer-links">
       <button class="footer-link rss-btn" id="rss-btn" data-rss={`${siteUrl}/rss.xml`} aria-label="复制 RSS 订阅地址" title="点击复制 RSS 订阅地址">
@@ -49,7 +49,7 @@ const siteUrl = 'https://arimlll.github.io';
   .footer-inner {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     max-width: var(--max-width);
     margin: 0 auto;
     flex-wrap: wrap;
@@ -58,17 +58,17 @@ const siteUrl = 'https://arimlll.github.io';
 
   .footer-left {
     display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    align-items: center;
   }
 
-  .footer-extra-sites {
-    font-size: 0.82rem;
+  .footer-meta {
+    font-size: 0.85rem;
     color: var(--color-text-secondary);
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.4rem;
     flex-wrap: wrap;
+    margin: 0;
   }
 
   .footer-site-link {
@@ -83,7 +83,7 @@ const siteUrl = 'https://arimlll.github.io';
   }
 
   .sep {
-    opacity: 0.5;
+    opacity: 0.45;
   }
 
   .license-link {
