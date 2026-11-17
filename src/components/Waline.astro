@@ -1,12 +1,16 @@
 ---
+import { WALINE_CONFIG } from '@/config';
+
 interface Props {
   serverURL?: string;
   path?: string;
+  isGuestbook?: boolean;
 }
 
 const {
-  serverURL = '',
-  path = '/guestbook/',
+  serverURL = WALINE_CONFIG.serverURL,
+  path = Astro.url.pathname,
+  isGuestbook = false,
 } = Astro.props;
 ---
 <div class="waline-container">
@@ -15,29 +19,30 @@ const {
   ) : (
     <div class="waline-setup-card">
       <div class="setup-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       </div>
-      <h3>留言墙已就绪（支持免登录）</h3>
-      <p>留言墙前端组件已完全搭建完成。因为 GitHub Pages 为静态托管，无需登录的留言功能需要连接一个免费的后端存储服务。</p>
+      <h3>{isGuestbook ? '留言墙' : '评论区'}已切换为 Waline（支持免登录）</h3>
+      <p>前端组件已全面配置就绪，访客无需任何账号登录即可畅所欲言。请在配置文件中填入您的 Waline 服务端地址以激活数据读写：</p>
+      
       <div class="setup-steps">
         <div class="step-item">
           <span class="step-num">1</span>
           <div>
-            <strong>推荐方式一：Waline（最丰富）</strong>
-            <p>免登录、支持表情包与邮件通知。可在 <a href="https://waline.js.org/guide/get-started/" target="_blank" rel="noopener">Waline 官网</a> 点击 <strong>Vercel / Cloudflare 一键免费部署</strong>，随后将生成的服务地址填入即可。</p>
+            <strong>一键免费部署 Waline 后端（约需 1 分钟）</strong>
+            <p>前往 <a href="https://waline.js.org/guide/get-started/" target="_blank" rel="noopener">Waline 快速部署指引</a>，点击 <strong>Vercel 一键部署</strong>（数据库推荐使用免费的 LeanCloud 或 Supabase）。</p>
           </div>
         </div>
         <div class="step-item">
           <span class="step-num">2</span>
           <div>
-            <strong>推荐方式二：Cusdis（极简零运维）</strong>
-            <p>无需自己搭建服务器。在 <a href="https://cusdis.com" target="_blank" rel="noopener">Cusdis.com</a> 免费注册一个 App ID 即可免登录直接接收留言。</p>
+            <strong>在 <code>src/config.ts</code> 填入地址</strong>
+            <p>将部署后获得的独立域名填入 <code>src/config.ts</code> 的 <code>WALINE_CONFIG.serverURL</code> 中（例如 <code>https://waline.yourdomain.com</code>），文章评论与留言墙即可全站一键激活。</p>
           </div>
         </div>
       </div>
-      <p class="setup-tip">💡 如果您已有部署好的后端地址或 App ID，可以直接告诉我，我来帮您一键填入生效！</p>
+      <p class="setup-tip">💡 如果您已有部署好的地址，可以直接告诉我，我来为您一键填入生效！</p>
     </div>
   )}
 </div>
@@ -61,14 +66,14 @@ const {
         search: false,
         reaction: true,
         meta: ['nick', 'mail', 'link'],
-        requiredMeta: ['nick'], // 仅需输入昵称，完全无需登录
-        login: 'disable', // 禁用强制登录，任何人直接发表
+        requiredMeta: ['nick'], // 仅需输入昵称，任何人均可免登录直接发表
+        login: 'disable', // 禁用强制登录
         emoji: [
           '//unpkg.com/@waline/emojis@1.2.0/weibo',
           '//unpkg.com/@waline/emojis@1.2.0/bilibili',
         ],
         locale: {
-          placeholder: '留下你的足迹（无需登录，输入昵称即可发布）...',
+          placeholder: '雁过留痕，风过留声（无需登录，输入昵称即可发布）...',
         },
       });
     }
@@ -77,6 +82,67 @@ const {
     document.addEventListener('astro:after-swap', setupWaline);
   </script>
 )}
+
+<style is:global>
+  /* Waline 自定义色彩与布局适配 */
+  :root {
+    --waline-theme-color: var(--color-accent-text);
+    --waline-active-color: var(--color-accent-hover);
+    --waline-color: var(--color-text);
+    --waline-bg-color: var(--color-card-bg);
+    --waline-bg-color-light: var(--color-bg);
+    --waline-border-color: var(--color-border);
+    --waline-disable-bg-color: var(--color-code-bg);
+    --waline-disable-color: var(--color-text-secondary);
+    --waline-code-bg-color: var(--color-code-bg);
+    --waline-bq-color: var(--color-card-bg);
+    --waline-avatar-radius: 8px;
+    --waline-badge-color: var(--color-accent-text);
+    --waline-badge-border-color: var(--color-accent);
+    --waline-info-bg-color: var(--color-bg);
+    --waline-info-color: var(--color-text-secondary);
+    --waline-border: 1px solid var(--color-border);
+    --waline-font-size: 0.95rem;
+  }
+
+  [data-theme="dark"] {
+    --waline-theme-color: var(--color-accent);
+    --waline-active-color: var(--color-accent-hover);
+    --waline-color: var(--color-text);
+    --waline-bg-color: var(--color-card-bg);
+    --waline-bg-color-light: var(--color-bg);
+    --waline-border-color: var(--color-border);
+    --waline-disable-bg-color: var(--color-code-bg);
+    --waline-disable-color: var(--color-text-secondary);
+    --waline-code-bg-color: var(--color-code-bg);
+    --waline-bq-color: var(--color-card-bg);
+    --waline-badge-color: var(--color-accent);
+    --waline-badge-border-color: var(--color-accent);
+    --waline-info-bg-color: var(--color-bg);
+    --waline-info-color: var(--color-text-secondary);
+  }
+
+  .wl-panel {
+    border-radius: 12px !important;
+    border: 1px solid var(--color-border) !important;
+    background-color: var(--color-card-bg) !important;
+  }
+
+  .wl-btn {
+    border-radius: 6px !important;
+  }
+
+  .wl-btn.primary {
+    background-color: var(--color-accent) !important;
+    color: #1a1a1a !important;
+    border-color: var(--color-accent) !important;
+    font-weight: 600;
+  }
+
+  .wl-card-item {
+    border-bottom: 1px dashed var(--color-border) !important;
+  }
+</style>
 
 <style>
   .waline-container {
@@ -101,7 +167,7 @@ const {
   }
 
   .waline-setup-card h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     margin-bottom: 0.6rem;
   }
 
@@ -141,7 +207,7 @@ const {
   }
 
   .step-item strong {
-    font-size: 1rem;
+    font-size: 0.95rem;
     display: block;
     margin-bottom: 0.25rem;
   }

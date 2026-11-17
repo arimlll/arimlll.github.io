@@ -76,7 +76,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
       });
 
       function performSearch(query: string) {
-        resultsContainer!.innerHTML = '';
+        resultsContainer!.replaceChildren();
         emptyMsg!.style.display = 'none';
 
         if (clearBtn) {

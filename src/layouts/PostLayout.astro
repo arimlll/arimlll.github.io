@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import TagList from '@/components/TagList.astro';
-import Giscus from '@/components/Giscus.astro';
+import Waline from '@/components/Waline.astro';
 
 interface Props {
   title: string;
@@ -100,7 +100,10 @@ const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
       <p>💡 版权声明：本文采用 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0</a> 许可协议，转载请注明出处。</p>
     </div>
 
-    <Giscus lang={lang === 'ja' ? 'ja' : lang === 'en' ? 'en' : 'zh-CN'} />
+    <section class="comments-section">
+      <h2 class="comments-title">评论</h2>
+      <Waline path={Astro.url.pathname} />
+    </section>
   </article>
 
   <!-- Back to top button -->
@@ -284,6 +287,31 @@ const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
     color: #1a1a1a;
     border-color: var(--color-accent);
     opacity: 1;
+  }
+
+  .comments-section {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .comments-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .comments-title::after {
+    content: '';
+    position: absolute;
+    bottom: -0.35rem;
+    left: 0;
+    width: 1.75rem;
+    height: 2px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
   }
 
   .back-to-top {
