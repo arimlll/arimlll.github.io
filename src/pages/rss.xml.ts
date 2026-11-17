@@ -54,7 +54,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: '啊睿猫 | Ariml\'s Blog',
-    description: '啊睿猫的个人博客，分享法律和生活。',
+    description: '啊睿猫的个人博客 | Ariml\'s Blog',
     site: context.site!,
     stylesheet: '/rss-style.xsl',
     xmlns: {
