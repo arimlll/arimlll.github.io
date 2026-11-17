@@ -151,10 +151,12 @@ const {
 
   .waline-setup-card {
     background-color: var(--color-card-bg);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-card-border);
     border-radius: 14px;
     padding: 2rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: var(--card-shadow);
   }
 
   .setup-icon {

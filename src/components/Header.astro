@@ -130,9 +130,9 @@ const isHomePage = currentPath === '/' || currentPath === '';
     z-index: 100;
     height: var(--header-height);
     background-color: var(--color-header-bg);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--color-card-border);
   }
 
   .header-inner {
@@ -171,36 +171,32 @@ const isHomePage = currentPath === '/' || currentPath === '';
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0.35rem;
   }
 
   .nav-link {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     color: var(--color-text-secondary);
-    transition: color 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    padding: 0.25rem 0;
+    padding: 0.3rem 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid transparent;
   }
 
   .nav-link:hover {
-    color: var(--color-accent-text);
+    color: var(--color-text);
+    background-color: var(--color-card-bg);
+    border-color: var(--color-card-border);
   }
 
   .nav-link.active {
     color: var(--color-text);
     font-weight: 600;
-  }
-
-  .nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: var(--color-accent);
-    border-radius: 2px;
+    background-color: var(--color-tag-bg);
+    border: 1px solid var(--color-tag-border);
   }
 
   .menu-toggle {

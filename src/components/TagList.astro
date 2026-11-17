@@ -23,18 +23,19 @@ const { tags = [] } = Astro.props;
   .tag-pill {
     background-color: var(--color-tag-bg);
     color: var(--color-tag-text);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
     font-size: 0.8rem;
     font-weight: 500;
     text-decoration: none;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid var(--color-tag-border);
   }
 
   .tag-pill:hover {
     border-color: var(--color-accent);
     color: var(--color-accent-text);
     transform: translateY(-1px);
+    box-shadow: 0 2px 8px -1px rgba(248, 200, 34, 0.25);
   }
 </style>

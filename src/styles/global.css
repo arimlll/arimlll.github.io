@@ -3,18 +3,24 @@
 
 /* ===== CSS Variables ===== */
 :root {
-  --color-bg: #f5f5f7;
+  --color-bg: #f8f9fc;
   --color-text: #1d1d1f;
   --color-text-secondary: #6e6e73;
   --color-accent: #F8C822;
   --color-accent-hover: #dfa800;
   --color-accent-text: #a87900;
-  --color-card-bg: #ffffff;
-  --color-border: #e2e2e7;
-  --color-code-bg: #f0f0f3;
-  --color-tag-bg: #fef8db;
-  --color-tag-text: #7a5c00;
-  --color-header-bg: rgba(245, 245, 247, 0.88);
+  --color-card-bg: rgba(255, 255, 255, 0.88);
+  --color-card-border: rgba(0, 0, 0, 0.08);
+  --color-border: #e6e6ed;
+  --color-code-bg: #f0f0f4;
+  --color-tag-bg: rgba(248, 200, 34, 0.12);
+  --color-tag-text: #8a6500;
+  --color-tag-border: rgba(248, 200, 34, 0.28);
+  --color-header-bg: rgba(248, 249, 252, 0.82);
+  --color-grid-dot: rgba(0, 0, 0, 0.045);
+  --ambient-glow: rgba(248, 200, 34, 0.09);
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04);
+  --card-hover-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.08), 0 0 24px -4px rgba(248, 200, 34, 0.16);
   --scrollbar-thumb: var(--color-border);
   --scrollbar-track: transparent;
   --font-body: 'Inter', 'Noto Serif SC', 'Noto Serif JP', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -26,18 +32,24 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #13141f;
+  --color-bg: #090a10;
   --color-text: #e6e6ec;
   --color-text-secondary: #9292a8;
   --color-accent: #F8C822;
   --color-accent-hover: #ffe066;
   --color-accent-text: #F8C822;
-  --color-card-bg: #1a1b2b;
-  --color-border: #282a3f;
-  --color-code-bg: #0f1019;
-  --color-tag-bg: #2b2814;
+  --color-card-bg: rgba(17, 19, 30, 0.75);
+  --color-card-border: rgba(255, 255, 255, 0.09);
+  --color-border: #1e2030;
+  --color-code-bg: #0d0e17;
+  --color-tag-bg: rgba(248, 200, 34, 0.12);
   --color-tag-text: #f0d060;
-  --color-header-bg: rgba(19, 20, 31, 0.88);
+  --color-tag-border: rgba(248, 200, 34, 0.25);
+  --color-header-bg: rgba(9, 10, 16, 0.82);
+  --color-grid-dot: rgba(255, 255, 255, 0.05);
+  --ambient-glow: rgba(248, 200, 34, 0.12);
+  --card-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+  --card-hover-shadow: 0 14px 36px -8px rgba(0, 0, 0, 0.55), 0 0 28px -4px rgba(248, 200, 34, 0.18);
   --scrollbar-thumb: var(--color-border);
   --scrollbar-track: transparent;
   color-scheme: dark;
@@ -69,10 +81,29 @@ html {
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-grid-dot) 1px, transparent 1px);
+  background-size: 26px 26px;
   color: var(--color-text);
   line-height: 1.8;
   min-height: 100vh;
+  position: relative;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Zeabur-inspired ambient top glow */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: 900px;
+  height: 420px;
+  background: radial-gradient(55% 55% at 50% 0%, var(--ambient-glow) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
 }
 
 a {
