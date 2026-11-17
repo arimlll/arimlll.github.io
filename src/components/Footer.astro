@@ -15,11 +15,11 @@ const siteUrl = 'https://arimlll.github.io';
         <span class="sep">·</span>
         <a href="/jkfz187/" class="footer-site-link">jkfz187</a>
         <span class="sep">·</span>
-        <a href="/jkfz187/czp/" class="footer-site-link">一些蠢小说</a>
+        <a href="/jkfz187/czp/" class="footer-site-link" data-i18n="footer.novelLink">一些蠢小说</a>
       </p>
     </div>
     <div class="footer-links">
-      <button class="footer-link rss-btn" id="rss-btn" data-rss={`${siteUrl}/rss.xml`} aria-label="复制 RSS 订阅地址" title="点击复制 RSS 订阅地址">
+      <button class="footer-link rss-btn" id="rss-btn" data-rss={`${siteUrl}/rss.xml`} aria-label="RSS" title="点击复制 RSS 订阅地址" data-i18n-title="footer.copyRss">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 11a9 9 0 0 1 9 9"></path>
           <path d="M4 4a16 16 0 0 1 16 16"></path>
@@ -163,6 +163,13 @@ const siteUrl = 'https://arimlll.github.io';
     }, 2500);
   }
 
+  function getRssCopiedMessage(): string {
+    const lang = (document.documentElement.getAttribute('data-lang') || localStorage.getItem('lang') || 'zh');
+    if (lang === 'en') return 'RSS feed URL copied!';
+    if (lang === 'ja') return 'RSS購読URLをコピーしました！';
+    return 'RSS 订阅地址已复制';
+  }
+
   function initRssButton() {
     const btn = document.getElementById('rss-btn');
     if (!btn) return;
@@ -172,9 +179,10 @@ const siteUrl = 'https://arimlll.github.io';
       const rssUrl = btn.getAttribute('data-rss');
       if (!rssUrl) return;
       
+      const msg = getRssCopiedMessage();
       try {
         await navigator.clipboard.writeText(rssUrl);
-        showFooterToast('RSS 订阅地址已复制');
+        showFooterToast(msg);
       } catch (err) {
         const textarea = document.createElement('textarea');
         textarea.value = rssUrl;
@@ -184,7 +192,7 @@ const siteUrl = 'https://arimlll.github.io';
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        showFooterToast('RSS 订阅地址已复制');
+        showFooterToast(msg);
       }
     });
   }

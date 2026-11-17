@@ -4,11 +4,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 <BaseLayout title="404 - 页面未找到">
   <div class="not-found animate-fade-in">
     <div class="error-code">404</div>
-    <h1 class="error-title">抱歉，您访问的页面不存在</h1>
-    <p class="error-desc">该页面可能已被移动、删除，或输入的链接地址有误。</p>
+    <h1 class="error-title" data-i18n="404.title">抱歉，您访问的页面不存在</h1>
+    <p class="error-desc" data-i18n="404.desc">该页面可能已被移动、删除，或输入的链接地址有误。</p>
     <div class="error-actions">
-      <a href="/" class="btn btn-primary">返回首页</a>
-      <a href="/blog/" class="btn btn-secondary">浏览所有文章</a>
+      <a href="/" class="btn btn-primary" data-i18n="404.backHome">返回首页</a>
+      <a href="/blog/" class="btn btn-secondary" data-i18n="404.browseAll">浏览所有文章</a>
     </div>
   </div>
 </BaseLayout>

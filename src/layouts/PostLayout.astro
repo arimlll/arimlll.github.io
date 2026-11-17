@@ -32,15 +32,6 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString(dateLocale, {
 const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
 const minReadLabel = lang === 'en' ? `~${readingTime} min read` : lang === 'ja' ? `約 ${readingTime} 分で読めます` : `约 ${readingTime} 分钟阅读`;
 const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '記事一覧に戻る' : '返回文章列表';
-
-const currentSlug = Astro.url.pathname.replace(/^\/blog\//, '').replace(/\/$/, '');
-const baseSlug = currentSlug.replace(/-(en|ja)$/, '');
-
-const langLinks = [
-  { code: 'zh', label: '简体中文', href: `/blog/${baseSlug}/` },
-  { code: 'en', label: 'English', href: `/blog/${baseSlug}-en/` },
-  { code: 'ja', label: '日本語', href: `/blog/${baseSlug}-ja/` },
-];
 ---
 <BaseLayout title={title} description={description}>
   <div class="post-nav">
@@ -49,7 +40,7 @@ const langLinks = [
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
       </svg>
-      <span>{backToListLabel}</span>
+      <span data-i18n="post.backToList">{backToListLabel}</span>
     </a>
   </div>
 
@@ -68,7 +59,7 @@ const langLinks = [
         </span>
         {updatedDate && (
           <span class="meta-item updated">
-            (更新于 <time datetime={updatedDate.toISOString()}>{formattedUpdatedDate}</time>)
+            <span data-i18n="post.updatedPrefix">{lang === 'en' ? '(Updated on ' : lang === 'ja' ? '(更新日: ' : '(更新于 '}</span><time datetime={updatedDate.toISOString()}>{formattedUpdatedDate}</time>)
           </span>
         )}
         {wordCount && (
@@ -95,33 +86,11 @@ const langLinks = [
       </div>
       {source && (
         <div class="post-source">
-          <span>本文最初来源：</span>
+          <span data-i18n="post.originalSource">本文最初来源：</span>
           <a href={source} target="_blank" rel="noopener">{source}</a>
         </div>
       )}
       <TagList tags={tags} />
-
-      <div class="post-lang-switcher">
-        <span class="lang-switch-label">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-          <span>语言 / Language:</span>
-        </span>
-        <div class="lang-pills">
-          {langLinks.map(l => (
-            <a
-              href={l.href}
-              class:list={['lang-pill', { active: lang === l.code }]}
-              data-target-lang={l.code}
-            >
-              {l.label}
-            </a>
-          ))}
-        </div>
-      </div>
     </header>
 
     <hr class="post-divider" />
@@ -131,7 +100,7 @@ const langLinks = [
     </div>
 
     <div class="post-footer-notice">
-      <p>💡 版权声明：本文采用 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0</a> 许可协议，转载请注明出处。</p>
+      <p data-i18n-html="post.copyrightNotice">💡 版权声明：本文采用 <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL-3.0</a> 许可协议，转载请注明出处。</p>
     </div>
 
     <section class="comments-section">
@@ -199,16 +168,6 @@ const langLinks = [
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
-
-    // Save language preference when switching translation
-    document.querySelectorAll('.lang-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        const target = pill.getAttribute('data-target-lang');
-        if (target) {
-          localStorage.setItem('lang', target);
-        }
-      });
-    });
   }
 
   setupArticleEnhancements();
@@ -331,57 +290,6 @@ const langLinks = [
     color: #1a1a1a;
     border-color: var(--color-accent);
     opacity: 1;
-  }
-
-  .post-lang-switcher {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.25rem;
-    padding: 0.45rem 0.85rem;
-    border-radius: 10px;
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-card-border);
-    backdrop-filter: blur(10px);
-    font-size: 0.85rem;
-    flex-wrap: wrap;
-  }
-
-  .lang-switch-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--color-text-secondary);
-    font-weight: 500;
-  }
-
-  .lang-pills {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .lang-pill {
-    padding: 0.15rem 0.65rem;
-    border-radius: 9999px;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-    font-size: 0.8rem;
-  }
-
-  .lang-pill:hover {
-    color: var(--color-text);
-    border-color: var(--color-card-border);
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .lang-pill.active {
-    background-color: var(--color-tag-bg);
-    color: var(--color-accent-text);
-    border-color: var(--color-tag-border);
-    font-weight: 600;
   }
 
   .comments-section {

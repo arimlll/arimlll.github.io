@@ -34,10 +34,10 @@ const { tag, posts } = Astro.props;
 <BaseLayout title={`#${tag}`} description={`标签「${tag}」下的所有博客文章`}>
   <div class="page-header">
     <div class="breadcrumb">
-      <a href="/tags/">&larr; 返回标签列表</a>
+      <a href="/tags/" data-i18n="tags.backToTags">&larr; 返回标签列表</a>
     </div>
     <h1 class="page-title">#{tag}</h1>
-    <p class="page-desc">该标签下共有 {posts.length} 篇文章</p>
+    <p class="page-desc"><span data-i18n="tags.tagged">标签为</span> #{tag}</p>
   </div>
 
   <div class="post-list">
@@ -49,6 +49,7 @@ const { tag, posts } = Astro.props;
         slug={post.slug || post.id}
         tags={post.data.tags}
         wordCount={post.wordCount}
+        lang={post.data.lang}
       />
     ))}
   </div>

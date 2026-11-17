@@ -18,14 +18,14 @@ const postsWithWordCount = await Promise.all(
 <BaseLayout title="首页">
   <section class="hero animate-fade-in">
     <h1 class="hero-title" id="hero-title">Ariml<span class="hero-dot">.</span></h1>
-    <p class="hero-sub">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」</p>
+    <p class="hero-sub" data-i18n-html="home.subHtml">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」</p>
   </section>
 
   {posts.length > 0 && (
     <section class="recent-posts">
       <div class="section-header">
         <h2 class="section-title" data-i18n="home.recentPosts">最新文章</h2>
-        <a href="/blog/" class="view-all-link"><span data-i18n="home.viewAll">全部文章</span> ({posts.length}) &rarr;</a>
+        <a href="/blog/" class="view-all-link"><span data-i18n="home.viewAll">全部文章</span> &rarr;</a>
       </div>
       <div class="post-list">
         {postsWithWordCount.map(post => (
