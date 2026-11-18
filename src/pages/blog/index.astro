@@ -12,6 +12,7 @@ const postsWithWordCount = await Promise.all(
       return {
         ...post,
         wordCount: remarkPluginFrontmatter?.wordCount,
+        readingTime: remarkPluginFrontmatter?.readingTime,
       };
     })
 );
@@ -32,6 +33,7 @@ const postsWithWordCount = await Promise.all(
         slug={post.slug || post.id}
         tags={post.data.tags}
         wordCount={post.wordCount}
+        readingTime={post.readingTime}
         lang={post.data.lang}
       />
     ))}

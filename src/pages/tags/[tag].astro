@@ -12,6 +12,7 @@ export async function getStaticPaths() {
       return {
         ...post,
         wordCount: remarkPluginFrontmatter?.wordCount,
+        readingTime: remarkPluginFrontmatter?.readingTime,
       };
     })
   );
@@ -73,6 +74,7 @@ const { tag, group, posts } = Astro.props;
         slug={post.slug || post.id}
         tags={post.data.tags}
         wordCount={post.wordCount}
+        readingTime={post.readingTime}
         lang={post.data.lang}
       />
     ))}

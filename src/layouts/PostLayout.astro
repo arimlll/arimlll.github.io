@@ -14,9 +14,10 @@ interface Props {
   lang?: string;
   source?: string;
   wordCount?: number;
+  readingTime?: number;
 }
 
-const { title, titleRuby, description, pubDate, updatedDate, tags = [], lang = 'zh', source, wordCount } = Astro.props;
+const { title, titleRuby, description, pubDate, updatedDate, tags = [], lang = 'zh', source, wordCount, readingTime: propReadingTime } = Astro.props;
 
 const dateLocale = lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'zh-CN';
 const formattedPubDate = pubDate.toLocaleDateString(dateLocale, {
@@ -31,7 +32,14 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString(dateLocale, {
   day: 'numeric',
 });
 
-const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
+const fallbackReadingTime = wordCount
+  ? lang === 'en'
+    ? Math.max(1, Math.ceil(wordCount / 200))
+    : lang === 'ja'
+      ? Math.max(1, Math.ceil(wordCount / 400))
+      : Math.max(1, Math.ceil(wordCount / 300))
+  : null;
+const readingTime = propReadingTime ?? fallbackReadingTime;
 const minReadLabel = lang === 'en' ? `~${readingTime} min read` : lang === 'ja' ? `約 ${readingTime} 分で読めます` : `约 ${readingTime} 分钟阅读`;
 const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '記事一覧に戻る' : '返回文章列表';
 ---

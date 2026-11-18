@@ -7,10 +7,11 @@ interface Props {
   slug: string;
   tags?: string[];
   wordCount?: number;
+  readingTime?: number;
   lang?: string;
 }
 
-const { title, titleRuby, description, pubDate, slug, tags = [], wordCount, lang = 'zh' } = Astro.props;
+const { title, titleRuby, description, pubDate, slug, tags = [], wordCount, readingTime: propReadingTime, lang = 'zh' } = Astro.props;
 const date = new Date(pubDate);
 const locale = lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'zh-CN';
 const formattedDate = date.toLocaleDateString(locale, {
@@ -18,7 +19,14 @@ const formattedDate = date.toLocaleDateString(locale, {
   month: 'long',
   day: 'numeric',
 });
-const readingTime = wordCount ? Math.max(1, Math.ceil(wordCount / 300)) : null;
+const fallbackReadingTime = wordCount
+  ? lang === 'en'
+    ? Math.max(1, Math.ceil(wordCount / 200))
+    : lang === 'ja'
+      ? Math.max(1, Math.ceil(wordCount / 400))
+      : Math.max(1, Math.ceil(wordCount / 300))
+  : null;
+const readingTime = propReadingTime ?? fallbackReadingTime;
 
 const wordsUnit = lang === 'en' ? 'words' : lang === 'ja' ? '文字' : '字';
 const minText = lang === 'en' ? `~${readingTime} min` : lang === 'ja' ? `約 ${readingTime} 分` : `约 ${readingTime} 分钟`;

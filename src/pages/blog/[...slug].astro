@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 const post = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 const wordCount = remarkPluginFrontmatter?.wordCount;
+const readingTime = remarkPluginFrontmatter?.readingTime;
 ---
 <PostLayout
   title={post.data.title}
@@ -24,6 +25,7 @@ const wordCount = remarkPluginFrontmatter?.wordCount;
   lang={post.data.lang}
   source={post.data.source}
   wordCount={wordCount}
+  readingTime={readingTime}
 >
   <Content />
 </PostLayout>
