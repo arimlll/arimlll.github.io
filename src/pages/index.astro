@@ -31,13 +31,14 @@ const postsWithWordCount = await Promise.all(
         >Ariml</span><span class="hero-dot" id="hero-dot" aria-hidden="true">.</span>
       </h1>
       <div class="hero-badge" id="hero-badge">
-        <p class="hero-sub" data-i18n-html="home.subHtml">
-          微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」
+        <p class="hero-sub" data-i18n-html="home.badgeHtml">
+          微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>
         </p>
       </div>
     </div>
 
     <div class="hero-scroll-cue" id="hero-scroll-cue">
+      <p class="hero-motto" id="hero-motto" data-i18n="home.motto">「黄河长江不会倒流」</p>
       <a href="#recent-posts" class="scroll-cue-btn" id="scroll-cue-btn" aria-label="向下滚动查看最新文章">
         <span class="scroll-cue-text" data-i18n="home.scrollDown">向下滚动查看</span>
         <svg class="scroll-cue-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -121,6 +122,7 @@ const postsWithWordCount = await Promise.all(
         const target = e.target as HTMLElement;
         if (target.closest('a') || target.closest('button')) return;
         if (target.closest('#typewriter-title')) return;
+        if (target.closest('#hero-motto')) return;
         if (titleEl.getAttribute('contenteditable') === 'true') {
           titleEl.focus({ preventScroll: true });
           setCaretToEnd(titleEl);
@@ -378,13 +380,30 @@ const postsWithWordCount = await Promise.all(
     bottom: 1.25rem;
     left: 50%;
     transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
     opacity: 0;
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 10;
+    width: max-content;
+    max-width: 90vw;
   }
 
   .hero-scroll-cue.revealed {
-    opacity: 0.85;
+    opacity: 1;
+  }
+
+  .hero-motto {
+    font-family: var(--font-serif);
+    font-size: 0.96rem;
+    color: var(--color-text-secondary);
+    letter-spacing: 0.06em;
+    margin: 0;
+    line-height: 1.5;
+    user-select: text;
+    -webkit-user-select: text;
   }
 
   .hero-scroll-cue:hover {
