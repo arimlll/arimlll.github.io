@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://arimlll.github.io',
   integrations: [sitemap()],
   markdown: {
+    smartypants: false,
     remarkPlugins: [remarkWordCount],
   },
 });

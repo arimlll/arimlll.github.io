@@ -84,6 +84,10 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
         const storedScale = localStorage.getItem('reading-font-scale') || '100';
         document.documentElement.style.setProperty('--reading-font-scale', (parseInt(storedScale, 10) / 100).toString());
         document.documentElement.setAttribute('data-reading-scale', storedScale);
+
+        // Furigana display initialization
+        const storedFurigana = localStorage.getItem('furigana-display') || 'on';
+        document.documentElement.setAttribute('data-furigana', storedFurigana);
       })();
     </script>
   </head>

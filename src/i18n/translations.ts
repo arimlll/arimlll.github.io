@@ -87,6 +87,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'font.decrease': '缩小字号 (A-)',
     'font.increase': '放大字号 (A+)',
     'font.reset': '恢复默认字号 (100%)',
+    'furigana.hide': '隐藏假名',
+    'furigana.show': '显示假名',
+    'furigana.toggle': '开关假名标注',
   },
   en: {
     // Navigation
@@ -161,6 +164,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'font.decrease': 'Decrease font size (A-)',
     'font.increase': 'Increase font size (A+)',
     'font.reset': 'Reset font size (100%)',
+    'furigana.hide': 'Hide Furigana',
+    'furigana.show': 'Show Furigana',
+    'furigana.toggle': 'Toggle Furigana',
   },
   ja: {
     // Navigation
@@ -235,5 +241,8 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'font.decrease': '文字サイズを小さく (A-)',
     'font.increase': '文字サイズを大きく (A+)',
     'font.reset': '標準サイズに戻す (100%)',
+    'furigana.hide': 'ルビを隠す',
+    'furigana.show': 'ルビを表示',
+    'furigana.toggle': 'ルビ（ふりがな）表示切替',
   },
 };

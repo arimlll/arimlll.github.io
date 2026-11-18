@@ -1,44 +1,50 @@
 import { visit } from 'unist-util-visit';
 
 /**
- * 依据语种精确统计正文字数 / 单词数 / 字符数
+ * 依据语种精确统计：
+ * 1. wordCount：字数 / 词数（包含标点符号）
+ * 2. readingTime：预估阅读时间（分钟，不包含标点符号）
  */
-function countWordsForLang(text, lang) {
-  if (!text) return 0;
+function analyzeTextForLang(text, lang) {
+  if (!text) return { wordCount: 0, readingTime: 1 };
   const clean = text.trim();
 
   if (lang === 'en') {
-    // 英文：统计真实英文单词数（字母数字序列，支持词内连字符和撇号），标点符号不计入单词
+    // 英文单词与数字（不含标点）
     const words = clean.match(/\b[a-zA-Z0-9]+(?:['’\-][a-zA-Z0-9]+)*\b/g) || [];
-    return words.length;
+    // 标点符号与特殊符号
+    const punct = clean.match(/[\p{P}\p{S}]/gu) || [];
+    // 英文成人标准默读速率：200 WPM（仅按可读单词计算，不计入标点）
+    const readingTime = Math.max(1, Math.ceil(words.length / 200));
+    // 字数统计：包含标点符号
+    const wordCount = words.length + punct.length;
+    return { wordCount, readingTime };
   } else if (lang === 'ja') {
-    // 日文：按照日本出版和组版规范统计“文字数”（去除所有空白，包含汉字、平假名、片假名、英数与句读符号）
-    return clean.replace(/\s+/g, '').length;
+    // 日文全部字符（包含汉字、假名、数字、英文字母及句读标点，去除空白）
+    const totalChars = clean.replace(/\s+/g, '');
+    // 纯文本字符（去除所有标点符号与特殊记号）
+    const textOnlyChars = totalChars.replace(/[\p{P}\p{S}\u3000-\u303f\uff00-\uffef]/gu, '');
+    // 日文标准默读速率：400 字符/分钟（仅按纯文字计算，不计入标点）
+    const readingTime = Math.max(1, Math.ceil(textOnlyChars.length / 400));
+    // 字数统计：包含标点符号（即日本出版通常所指“文字数”）
+    const wordCount = totalChars.length;
+    return { wordCount, readingTime };
   } else {
-    // 中文：CJK 汉字 + 全角中文标点 + 英文单词 + 数字
+    // 中文 CJK 汉字
     const cjk = clean.match(/[\u4e00-\u9fa5\u3400-\u4dbf]/g) || [];
-    const enWords = clean.match(/\b[a-zA-Z0-9]+(?:['’\-][a-zA-Z0-9]+)*\b/g) || [];
-    const cjkPunct = clean.match(/[\u3000-\u303f\uff00-\uffef]/g) || [];
+    // 英文单词
+    const enWords = clean.match(/\b[a-zA-Z]+(?:['’\-][a-zA-Z]+)*\b/g) || [];
+    // 独立数字
     const numbers = clean.match(/\d+/g) || [];
-    return cjk.length + enWords.length + cjkPunct.length + numbers.length;
-  }
-}
-
-/**
- * 依据真实语种阅读速率计算预估阅读时间（分钟）
- */
-function calculateReadingTime(wordCount, lang) {
-  if (!wordCount || wordCount <= 0) return 1;
-
-  if (lang === 'en') {
-    // 英文国际通用成人默读速率：200 WPM (Words Per Minute)
-    return Math.max(1, Math.ceil(wordCount / 200));
-  } else if (lang === 'ja') {
-    // 日文标准默读速率：400 文字/分（论说文、学术专业文标准速率）
-    return Math.max(1, Math.ceil(wordCount / 400));
-  } else {
-    // 中文标准默读速率：300 字/分钟
-    return Math.max(1, Math.ceil(wordCount / 300));
+    // 标点符号（含中英文标点）
+    const punct = clean.match(/[\p{P}\p{S}\u3000-\u303f\uff00-\uffef]/gu) || [];
+    // 可读内容（不包含标点符号）
+    const readingUnits = cjk.length + enWords.length + numbers.length;
+    // 中文标准默读速率：300 字/分钟（仅按可读文字计算，不计入标点）
+    const readingTime = Math.max(1, Math.ceil(readingUnits / 300));
+    // 字数统计：包含标点符号
+    const wordCount = cjk.length + enWords.length + numbers.length + punct.length;
+    return { wordCount, readingTime };
   }
 }
 
@@ -101,8 +107,7 @@ export default function remarkWordCount() {
     });
 
     const fullText = textChunks.join(' ');
-    const wordCount = countWordsForLang(fullText, lang);
-    const readingTime = calculateReadingTime(wordCount, lang);
+    const { wordCount, readingTime } = analyzeTextForLang(fullText, lang);
 
     if (!file.data.astro) {
       file.data.astro = {};

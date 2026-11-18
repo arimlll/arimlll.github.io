@@ -115,9 +115,19 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
           </svg>
           縦書き（右から左へスクロール）
         </span>
-        <button class="tategaki-toggle-btn" id="tategaki-toggle" type="button" aria-label="縦書き・横書き切替">
-          <span id="tategaki-mode-label">横書きで読む</span>
-        </button>
+        <div class="tategaki-actions">
+          <button class="tategaki-toggle-btn" id="furigana-toggle" type="button" aria-label="ルビ（ふりがな）表示切替" title="ルビ（ふりがな）表示切替">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7V4h16v3"></path>
+              <path d="M9 20h6"></path>
+              <path d="M12 4v16"></path>
+            </svg>
+            <span id="furigana-mode-label">ルビを隠す</span>
+          </button>
+          <button class="tategaki-toggle-btn" id="tategaki-toggle" type="button" aria-label="縦書き・横書き切替" title="縦書き・横書き切替">
+            <span id="tategaki-mode-label">横書きで読む</span>
+          </button>
+        </div>
       </div>
     )}
 
@@ -231,6 +241,31 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
         });
       }
     }
+
+    // Japanese Furigana (ルビ) toggle
+    const furiganaBtn = document.getElementById('furigana-toggle');
+    const furiganaLabel = document.getElementById('furigana-mode-label');
+
+    function syncFuriganaUI() {
+      const isOff = document.documentElement.getAttribute('data-furigana') === 'off';
+      if (furiganaLabel) {
+        furiganaLabel.textContent = isOff ? 'ルビを表示' : 'ルビを隠す';
+      }
+      if (furiganaBtn) {
+        furiganaBtn.setAttribute('aria-pressed', isOff ? 'false' : 'true');
+      }
+    }
+
+    if (furiganaBtn) {
+      syncFuriganaUI();
+      furiganaBtn.onclick = () => {
+        const currentlyOff = document.documentElement.getAttribute('data-furigana') === 'off';
+        const nextState = currentlyOff ? 'on' : 'off';
+        document.documentElement.setAttribute('data-furigana', nextState);
+        localStorage.setItem('furigana-display', nextState);
+        syncFuriganaUI();
+      };
+    }
   }
 
   setupArticleEnhancements();
@@ -248,6 +283,8 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
     border-radius: 10px;
     margin-bottom: 1.25rem;
     font-size: 0.85rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
   }
 
   .tategaki-hint {
@@ -259,7 +296,17 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
     font-size: 0.82rem;
   }
 
+  .tategaki-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
   .tategaki-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-card-border);
     border-radius: 6px;

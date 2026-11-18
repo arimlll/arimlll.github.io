@@ -131,6 +131,17 @@ img {
   outline-offset: 2px;
 }
 
+/* ===== Selection (选中文本黄色背景) ===== */
+::selection {
+  background-color: var(--color-accent);
+  color: #111827;
+}
+
+::-moz-selection {
+  background-color: var(--color-accent);
+  color: #111827;
+}
+
 /* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.4;
@@ -455,4 +466,18 @@ rt {
   text-align: center;
   color: var(--color-text-secondary);
   user-select: none;
+}
+
+/* ===== Furigana (ルビ) Display Toggle ===== */
+[data-furigana="off"] rt,
+.post[data-furigana="off"] rt {
+  display: none !important;
+}
+
+/* ===== English Typography & Half-Width Punctuation ===== */
+:lang(en) .prose,
+[data-lang="en"] .prose,
+.post[lang="en"] .prose {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: normal;
 }
