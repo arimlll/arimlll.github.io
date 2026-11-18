@@ -28,7 +28,7 @@ const postsWithWordCount = await Promise.all(
           role="textbox"
           aria-multiline="false"
           data-placeholder="Ariml"
-        >Ariml</span><span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span><span class="hero-dot" id="hero-dot">.</span>
+        >Ariml</span><span class="hero-dot" id="hero-dot" aria-hidden="true">.</span>
       </h1>
       <div class="hero-badge" id="hero-badge">
         <p class="hero-sub" data-i18n-html="home.subHtml">
@@ -74,19 +74,34 @@ const postsWithWordCount = await Promise.all(
 
 <script>
   let typingTimeoutId: number | null = null;
+  let globalKeydownBound = false;
 
   function initHomeHero() {
     if (typingTimeoutId) clearTimeout(typingTimeoutId);
 
     const titleEl = document.getElementById('typewriter-title');
     const dotEl = document.getElementById('hero-dot');
-    const cursorEl = document.getElementById('typewriter-cursor');
     const badgeEl = document.getElementById('hero-badge');
     const scrollCueEl = document.getElementById('hero-scroll-cue');
     const recentPostsEl = document.getElementById('recent-posts');
     const cueBtn = document.getElementById('scroll-cue-btn');
+    const heroEl = document.getElementById('home-hero');
 
-    if (!titleEl || !dotEl || !cursorEl) return;
+    if (!titleEl || !dotEl) return;
+
+    function setCaretToEnd(el: HTMLElement) {
+      try {
+        const sel = window.getSelection();
+        if (!sel) return;
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } catch {
+        // Ignore
+      }
+    }
 
     if (cueBtn && !cueBtn.dataset.bound) {
       cueBtn.dataset.bound = 'true';
@@ -99,14 +114,35 @@ const postsWithWordCount = await Promise.all(
       });
     }
 
+    // Clicking anywhere in the hero section (except buttons/links/text itself) focuses the title
+    if (heroEl && !heroEl.dataset.clickBound) {
+      heroEl.dataset.clickBound = 'true';
+      heroEl.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('a') || target.closest('button')) return;
+        if (target.closest('#typewriter-title')) return;
+        if (titleEl.getAttribute('contenteditable') === 'true') {
+          titleEl.focus({ preventScroll: true });
+          setCaretToEnd(titleEl);
+        }
+      });
+    }
+
     function enableInteractiveTyping() {
       if (!titleEl) return;
       titleEl.setAttribute('contenteditable', 'true');
 
+      try {
+        titleEl.focus({ preventScroll: true });
+        setCaretToEnd(titleEl);
+      } catch {
+        // Ignore
+      }
+
       if (!titleEl.dataset.eventsBound) {
         titleEl.dataset.eventsBound = 'true';
 
-        // IME-safe enter handling
+        // IME-safe enter handling: blur on Enter to finish editing
         titleEl.addEventListener('keydown', (e: KeyboardEvent) => {
           if (e.key === 'Enter') {
             e.preventDefault();
@@ -115,10 +151,20 @@ const postsWithWordCount = await Promise.all(
           }
         });
 
-        // If user presses printable keys while at top of page, focus titleEl
+        // Ensure clean placeholder trigger if user empties input
+        titleEl.addEventListener('input', () => {
+          if (!titleEl.textContent || titleEl.textContent === '\n') {
+            titleEl.replaceChildren();
+          }
+        });
+      }
+
+      if (!globalKeydownBound) {
+        globalKeydownBound = true;
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-          if (titleEl.getAttribute('contenteditable') !== 'true') return;
-          if (document.activeElement === titleEl) return;
+          const currentTitle = document.getElementById('typewriter-title');
+          if (!currentTitle || currentTitle.getAttribute('contenteditable') !== 'true') return;
+          if (document.activeElement === currentTitle) return;
           if (window.scrollY > 120) return;
 
           const target = e.target as HTMLElement;
@@ -128,15 +174,8 @@ const postsWithWordCount = await Promise.all(
 
           if (e.ctrlKey || e.metaKey || e.altKey) return;
           if (e.key.length === 1 || e.key === 'Backspace') {
-            titleEl.focus();
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(titleEl);
-            range.collapse(false);
-            if (selection) {
-              selection.removeAllRanges();
-              selection.addRange(range);
-            }
+            currentTitle.focus({ preventScroll: true });
+            setCaretToEnd(currentTitle);
           }
         });
       }
@@ -179,7 +218,7 @@ const postsWithWordCount = await Promise.all(
       // Light up the iconic golden dot!
       dotEl.classList.add('lit');
 
-      // Enable real interactive typing!
+      // Enable real interactive typing & place native caret at end!
       enableInteractiveTyping();
 
       // Smoothly fade in the capsule badge, scroll down cue, and content below
@@ -243,61 +282,30 @@ const postsWithWordCount = await Promise.all(
     white-space: pre-wrap;
     word-break: break-word;
     caret-color: var(--color-accent);
-    min-width: 1ch;
-    border-radius: 8px;
-    padding: 0 0.08em;
-    transition: background-color 0.2s ease;
+    min-width: 0.5ch;
+    padding: 0;
+    background: transparent;
   }
 
-  .typewriter-text[contenteditable="true"]:hover {
-    background-color: rgba(248, 200, 34, 0.08);
-  }
-
-  .typewriter-text[contenteditable="true"]:focus {
-    background-color: rgba(248, 200, 34, 0.1);
-  }
-
-  .typewriter-text:empty::before {
+  .typewriter-text[contenteditable="true"]:empty::before {
     content: attr(data-placeholder);
     color: var(--color-text-secondary);
     opacity: 0.35;
   }
 
-  /* Keep typewriter cursor blinking continuously */
-  .typewriter-cursor {
-    display: inline-block;
-    width: 2.5px;
-    height: 1.15em;
-    vertical-align: -0.15em;
-    background-color: var(--color-accent);
-    margin-left: 0.04em;
-    margin-right: 0.04em;
-    animation: cursorBlink 0.75s step-end infinite;
-    box-shadow: 0 0 8px rgba(248, 200, 34, 0.6);
-    border-radius: 1px;
-    transition: opacity 0.2s ease-out;
-  }
-
-  /* When the user is focused on the text, smoothly hide pseudo-cursor to use native caret */
-  .typewriter-text:focus + .typewriter-cursor {
-    opacity: 0;
-  }
-
-  @keyframes cursorBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  /* Golden dot - distanced from text and unclipped radiant glow */
+  /* Golden dot - tightly attached with radiant unclipped glow */
   .hero-dot {
     color: var(--color-accent);
     opacity: 0;
     transform: scale(0.4);
     display: inline-block;
     vertical-align: baseline;
-    margin-left: 0.22em; /* 离文字稍远 */
-    padding: 0 0.15em;
+    margin-left: 0.06em;
+    padding: 0;
     overflow: visible;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
     transition: opacity 0.35s ease-out, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.35s ease;
   }
 
@@ -433,9 +441,6 @@ const postsWithWordCount = await Promise.all(
       transform: none !important;
       animation: none !important;
       transition: none !important;
-    }
-    .typewriter-cursor {
-      display: none !important;
     }
     .scroll-cue-icon {
       animation: none !important;
