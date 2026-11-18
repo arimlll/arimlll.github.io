@@ -7,14 +7,12 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
-  hasSubNav?: boolean;
 }
 
 const {
   title,
   description = '啊睿猫的个人博客 | Ariml\'s Blog',
   ogImage = '/rss_cover.jpg',
-  hasSubNav = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -100,8 +98,7 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
   </head>
   <body>
     <Header />
-    <slot name="sub-nav" />
-    <main class:list={['container', { 'has-sub-nav': hasSubNav, 'is-home': isHome }]}>
+    <main class:list={['container', { 'is-home': isHome }]}>
       <slot />
     </main>
     <Footer />

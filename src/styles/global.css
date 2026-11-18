@@ -31,12 +31,6 @@
   --reading-font-scale: 1;
   --prose-base-font-size: 1.05rem;
   --prose-font-size: calc(var(--prose-base-font-size) * var(--reading-font-scale, 1));
-  --color-tategaki-bar-bg: rgba(254, 248, 226, 0.94);
-  --color-tategaki-bar-border: rgba(248, 200, 34, 0.32);
-  --color-tategaki-bar-text: #825e00;
-  --color-tategaki-bar-btn-bg: rgba(255, 255, 255, 0.92);
-  --color-tategaki-bar-btn-border: rgba(248, 200, 34, 0.35);
-  --color-tategaki-bar-btn-text: #594000;
   color-scheme: light dark;
 }
 
@@ -61,12 +55,6 @@
   --card-hover-shadow: 0 14px 36px -8px rgba(0, 0, 0, 0.55), 0 0 28px -4px rgba(248, 200, 34, 0.18);
   --scrollbar-thumb: var(--color-border);
   --scrollbar-track: transparent;
-  --color-tategaki-bar-bg: rgba(32, 26, 10, 0.94);
-  --color-tategaki-bar-border: rgba(248, 200, 34, 0.25);
-  --color-tategaki-bar-text: #f3d463;
-  --color-tategaki-bar-btn-bg: rgba(22, 18, 10, 0.88);
-  --color-tategaki-bar-btn-border: rgba(248, 200, 34, 0.3);
-  --color-tategaki-bar-btn-text: #eed068;
   color-scheme: dark;
 }
 
@@ -177,11 +165,6 @@ main {
   min-height: calc(100vh - var(--header-height) - 130px);
   padding-top: calc(var(--header-height) + 2rem);
   padding-bottom: 2.5rem;
-}
-
-main.has-sub-nav,
-body:has(.tategaki-toolbar) main {
-  padding-top: 1.5rem;
 }
 
 main.is-home {
