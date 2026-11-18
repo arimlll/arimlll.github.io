@@ -195,7 +195,7 @@ blockquote p {
   margin-top: 2.2em;
   margin-bottom: 0.85em;
   padding-bottom: 0.4em;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 2px solid var(--color-accent);
   font-size: calc(var(--prose-font-size, 1.05rem) * 1.38);
   letter-spacing: -0.01em;
 }
@@ -272,7 +272,8 @@ blockquote p {
 
 .prose hr {
   border: none;
-  border-top: 1px solid var(--color-border);
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--color-accent) 0%, rgba(248, 200, 34, 0.35) 50%, var(--color-border) 100%);
   margin: 2.5em 0;
 }
 
@@ -441,8 +442,9 @@ blockquote p {
 
 .post[lang="ja"] .prose:not(.horizontal-mode) hr {
   border: none;
-  border-left: 1px solid var(--color-border);
+  width: 1.5px;
   height: 100%;
+  background: linear-gradient(180deg, var(--color-accent) 0%, rgba(248, 200, 34, 0.35) 50%, var(--color-border) 100%);
   margin: 0 2em;
 }
 
