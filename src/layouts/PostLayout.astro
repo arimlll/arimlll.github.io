@@ -43,7 +43,45 @@ const readingTime = propReadingTime ?? fallbackReadingTime;
 const minReadLabel = lang === 'en' ? `~${readingTime} min read` : lang === 'ja' ? `約 ${readingTime} 分で読めます` : `约 ${readingTime} 分钟阅读`;
 const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '記事一覧に戻る' : '返回文章列表';
 ---
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} hasSubNav={lang === 'ja'}>
+  {lang === 'ja' && (
+    <nav class="tategaki-toolbar" id="tategaki-toolbar" slot="sub-nav" aria-label="日本語閲覧設定">
+      <div class="tategaki-toolbar-inner container">
+        <span class="tategaki-hint" id="tategaki-hint">
+          <svg class="icon-vertical" id="icon-vertical" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <svg class="icon-horizontal" id="icon-horizontal" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span id="tategaki-hint-text">縦書き（右から左へスクロール）</span>
+        </span>
+        <div class="tategaki-actions">
+          <button class="tategaki-toggle-btn" id="furigana-toggle" type="button" aria-label="ルビ（ふりがな）表示切替" title="ルビ（ふりがな）表示切替">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 7V4h16v3"></path>
+              <path d="M9 20h6"></path>
+              <path d="M12 4v16"></path>
+            </svg>
+            <span id="furigana-mode-label">ルビを隠す</span>
+          </button>
+          <button class="tategaki-toggle-btn" id="tategaki-toggle" type="button" aria-label="縦書き・横書き切替" title="縦書き・横書き切替">
+            <svg class="btn-icon-switch" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+            <span id="tategaki-mode-label">横書きで読む</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+  )}
+
   <div class="post-nav">
     <a href="/blog/" class="back-link">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -106,42 +144,6 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
 
     <hr class="post-divider" />
 
-    {lang === 'ja' && (
-      <div class="tategaki-toolbar" id="tategaki-toolbar">
-        <span class="tategaki-hint" id="tategaki-hint">
-          <svg class="icon-vertical" id="icon-vertical" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-          </svg>
-          <svg class="icon-horizontal" id="icon-horizontal" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-          <span id="tategaki-hint-text">縦書き（右から左へスクロール）</span>
-        </span>
-        <div class="tategaki-actions">
-          <button class="tategaki-toggle-btn" id="furigana-toggle" type="button" aria-label="ルビ（ふりがな）表示切替" title="ルビ（ふりがな）表示切替">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 7V4h16v3"></path>
-              <path d="M9 20h6"></path>
-              <path d="M12 4v16"></path>
-            </svg>
-            <span id="furigana-mode-label">ルビを隠す</span>
-          </button>
-          <button class="tategaki-toggle-btn" id="tategaki-toggle" type="button" aria-label="縦書き・横書き切替" title="縦書き・横書き切替">
-            <svg class="btn-icon-switch" xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="17 1 21 5 17 9"></polyline>
-              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-              <polyline points="7 23 3 19 7 15"></polyline>
-              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-            </svg>
-            <span id="tategaki-mode-label">横書きで読む</span>
-          </button>
-        </div>
-      </div>
-    )}
-
     <div class="prose" id="article-prose">
       <slot />
     </div>
@@ -165,8 +167,6 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
 </BaseLayout>
 
 <script>
-  import { UI_TRANSLATIONS, type Lang } from '@/i18n/translations';
-
   function setupArticleEnhancements() {
     // Add copy button to code blocks
     const preBlocks = document.querySelectorAll('.prose pre');
@@ -229,43 +229,36 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
     const furiganaBtn = document.getElementById('furigana-toggle');
     const furiganaLabel = document.getElementById('furigana-mode-label');
 
-    function getCurrentLang(): Lang {
-      const cur = document.documentElement.getAttribute('data-lang') as Lang;
-      return (cur === 'en' || cur === 'ja' || cur === 'zh') ? cur : 'ja';
-    }
-
     function scrollToStart() {
       if (!prose || prose.classList.contains('horizontal-mode')) return;
       prose.scrollLeft = prose.scrollWidth;
     }
 
     function updateToolbarTexts() {
-      const currentLang = getCurrentLang();
-      const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.ja;
       const isHorizontal = prose ? prose.classList.contains('horizontal-mode') : false;
       const isFuriganaOff = document.documentElement.getAttribute('data-furigana') === 'off';
 
       if (tategakiHintText) {
-        tategakiHintText.textContent = isHorizontal ? dict['tategaki.hintHorizontal'] : dict['tategaki.hintVertical'];
+        tategakiHintText.textContent = isHorizontal ? '横書き（上から下へスクロール）' : '縦書き（右から左へスクロール）';
       }
       if (tategakiLabel) {
-        tategakiLabel.textContent = isHorizontal ? dict['tategaki.toVertical'] : dict['tategaki.toHorizontal'];
+        tategakiLabel.textContent = isHorizontal ? '縦書きで読む' : '横書きで読む';
       }
       if (iconVertical && iconHorizontal) {
         iconVertical.style.display = isHorizontal ? 'none' : 'inline-block';
         iconHorizontal.style.display = isHorizontal ? 'inline-block' : 'none';
       }
       if (tategakiBtn) {
-        tategakiBtn.setAttribute('title', dict['tategaki.toggle']);
-        tategakiBtn.setAttribute('aria-label', dict['tategaki.toggle']);
+        tategakiBtn.setAttribute('title', '縦書き・横書き切替');
+        tategakiBtn.setAttribute('aria-label', '縦書き・横書き切替');
       }
 
       if (furiganaLabel) {
-        furiganaLabel.textContent = isFuriganaOff ? dict['furigana.show'] : dict['furigana.hide'];
+        furiganaLabel.textContent = isFuriganaOff ? 'ルビを表示' : 'ルビを隠す';
       }
       if (furiganaBtn) {
-        furiganaBtn.setAttribute('title', dict['furigana.toggle']);
-        furiganaBtn.setAttribute('aria-label', dict['furigana.toggle']);
+        furiganaBtn.setAttribute('title', 'ルビ（ふりがな）表示切替');
+        furiganaBtn.setAttribute('aria-label', 'ルビ（ふりがな）表示切替');
         furiganaBtn.setAttribute('aria-pressed', isFuriganaOff ? 'false' : 'true');
       }
     }
@@ -318,8 +311,6 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
         updateToolbarTexts();
       };
     }
-
-    window.addEventListener('lang-change', updateToolbarTexts);
   }
 
   setupArticleEnhancements();
@@ -329,34 +320,39 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
 <style>
   .tategaki-toolbar {
     position: sticky;
-    top: calc(var(--header-height) + 0.65rem);
-    z-index: 40;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.6rem 1rem;
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-tag-border);
-    border-radius: 12px;
-    margin-bottom: 1.25rem;
-    font-size: 0.85rem;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 90;
+    margin-top: var(--header-height);
+    background-color: var(--color-tategaki-bar-bg);
+    border-bottom: 1px solid var(--color-tategaki-bar-border);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.07);
-    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 18px -4px rgba(248, 200, 34, 0.14);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
   }
 
   [data-theme="dark"] .tategaki-toolbar {
-    box-shadow: 0 4px 22px -4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 22px -4px rgba(0, 0, 0, 0.55);
+  }
+
+  .tategaki-toolbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+    gap: 0.75rem;
+    font-size: 0.85rem;
   }
 
   .tategaki-hint {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    color: var(--color-tag-text);
+    color: var(--color-tategaki-bar-text);
     font-weight: 600;
     font-size: 0.82rem;
   }
@@ -365,21 +361,20 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    flex-wrap: wrap;
   }
 
   .tategaki-toggle-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    height: 32px;
-    background-color: var(--color-card-bg);
-    border: 1px solid var(--color-card-border);
+    height: 30px;
+    background-color: var(--color-tategaki-bar-btn-bg);
+    border: 1px solid var(--color-tategaki-bar-btn-border);
     border-radius: 6px;
     padding: 0 0.75rem;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: var(--color-text);
+    color: var(--color-tategaki-bar-btn-text);
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -395,10 +390,11 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
   }
 
   @media (max-width: 640px) {
-    .tategaki-toolbar {
-      top: calc(var(--header-height) + 0.35rem);
-      padding: 0.5rem 0.75rem;
+    .tategaki-toolbar-inner {
+      padding-top: 0.45rem;
+      padding-bottom: 0.45rem;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .tategaki-hint {
@@ -406,9 +402,9 @@ const backToListLabel = lang === 'en' ? 'Back to articles' : lang === 'ja' ? '�
     }
 
     .tategaki-toggle-btn {
-      height: 30px;
-      padding: 0 0.6rem;
-      font-size: 0.76rem;
+      height: 28px;
+      padding: 0 0.55rem;
+      font-size: 0.75rem;
     }
   }
 
