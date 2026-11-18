@@ -21,7 +21,7 @@ function isLinkActive(linkHref: string, path: string): boolean {
 const isHomePage = currentPath === '/' || currentPath === '';
 ---
 <header class="header">
-  <nav class="header-inner container">
+  <nav class="header-inner" aria-label="主要导航">
     <div
       class:list={[
         'header-logo-container',
@@ -32,18 +32,19 @@ const isHomePage = currentPath === '/' || currentPath === '';
       <Logo />
     </div>
 
-    <div class="header-right">
-      <div class="nav-links" id="nav-links">
-        {navLinks.map(link => (
-          <a
-            href={link.href}
-            class:list={['nav-link', { active: isLinkActive(link.href, currentPath) }]}
-            data-i18n={link.key}
-          >
-            {link.label}
-          </a>
-        ))}
-      </div>
+    <div class="nav-links" id="nav-links">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={['nav-link', { active: isLinkActive(link.href, currentPath) }]}
+          data-i18n={link.key}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    <div class="header-actions">
       <LanguageSwitch />
       <ThemeToggle />
       <button class="menu-toggle" id="menu-toggle" aria-label="切换菜单" aria-expanded="false">
@@ -143,12 +144,17 @@ const isHomePage = currentPath === '/' || currentPath === '';
     align-items: center;
     justify-content: space-between;
     height: 100%;
-    max-width: var(--max-width);
+    width: 100%;
+    max-width: 100%;
+    padding-left: clamp(1.25rem, 3.5vw, 2.75rem);
+    padding-right: clamp(1.25rem, 3.5vw, 2.75rem);
   }
 
   .header-logo-container {
+    flex: 1 1 0;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -165,16 +171,20 @@ const isHomePage = currentPath === '/' || currentPath === '';
     transform: translateY(0);
   }
 
-  .header-right {
+  .nav-links {
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    justify-content: center;
+    gap: 0.35rem;
   }
 
-  .nav-links {
+  .header-actions {
+    flex: 1 1 0;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    justify-content: flex-end;
+    gap: 0.85rem;
   }
 
   .nav-link {
@@ -218,6 +228,20 @@ const isHomePage = currentPath === '/' || currentPath === '';
   }
 
   @media (max-width: 640px) {
+    .header-inner {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .header-logo-container {
+      flex: 0 0 auto;
+    }
+
+    .header-actions {
+      flex: 0 0 auto;
+      gap: 0.5rem;
+    }
+
     .menu-toggle {
       display: flex;
     }
