@@ -20,8 +20,19 @@ const postsWithWordCount = await Promise.all(
   <section class="hero" id="home-hero">
     <div class="hero-content">
       <h1 class="hero-title" id="hero-title" aria-label="Ariml.">
-        <span class="typewriter-text" id="typewriter-title">Ariml</span><span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span><span class="hero-dot" id="hero-dot">.</span>
+        <span
+          class="typewriter-text"
+          id="typewriter-title"
+          contenteditable="false"
+          spellcheck="false"
+          role="textbox"
+          aria-multiline="false"
+          data-placeholder="Ariml"
+        >Ariml</span><span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span><span class="hero-dot" id="hero-dot">.</span>
       </h1>
+      <div class="typing-hint" id="typing-hint" aria-hidden="true">
+        <span data-i18n="home.typeHint">点击或直接敲键盘即可打字</span>
+      </div>
       <div class="hero-badge" id="hero-badge">
         <p class="hero-sub" data-i18n-html="home.subHtml">
           微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」
@@ -66,13 +77,16 @@ const postsWithWordCount = await Promise.all(
 
 <script>
   let typingTimeoutId: number | null = null;
+  let hintTimeoutId: number | null = null;
 
   function initHomeHero() {
     if (typingTimeoutId) clearTimeout(typingTimeoutId);
+    if (hintTimeoutId) clearTimeout(hintTimeoutId);
 
     const titleEl = document.getElementById('typewriter-title');
     const dotEl = document.getElementById('hero-dot');
     const cursorEl = document.getElementById('typewriter-cursor');
+    const hintEl = document.getElementById('typing-hint');
     const badgeEl = document.getElementById('hero-badge');
     const scrollCueEl = document.getElementById('hero-scroll-cue');
     const recentPostsEl = document.getElementById('recent-posts');
@@ -91,6 +105,54 @@ const postsWithWordCount = await Promise.all(
       });
     }
 
+    function enableInteractiveTyping() {
+      if (!titleEl) return;
+      titleEl.setAttribute('contenteditable', 'true');
+
+      if (!titleEl.dataset.eventsBound) {
+        titleEl.dataset.eventsBound = 'true';
+
+        // IME-safe enter handling
+        titleEl.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (e.isComposing || e.keyCode === 229) return;
+            titleEl.blur();
+          }
+        });
+
+        // Hide hint on focus
+        titleEl.addEventListener('focus', () => {
+          if (hintEl) hintEl.classList.remove('revealed');
+        });
+
+        // If user presses printable keys while at top of page, focus titleEl
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (titleEl.getAttribute('contenteditable') !== 'true') return;
+          if (document.activeElement === titleEl) return;
+          if (window.scrollY > 120) return;
+
+          const target = e.target as HTMLElement;
+          if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+            return;
+          }
+
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          if (e.key.length === 1 || e.key === 'Backspace') {
+            titleEl.focus();
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(titleEl);
+            range.collapse(false);
+            if (selection) {
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+          }
+        });
+      }
+    }
+
     // Respect prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
@@ -100,6 +162,7 @@ const postsWithWordCount = await Promise.all(
       if (badgeEl) badgeEl.classList.add('revealed');
       if (scrollCueEl) scrollCueEl.classList.add('revealed');
       if (recentPostsEl) recentPostsEl.classList.add('revealed');
+      enableInteractiveTyping();
       return;
     }
 
@@ -107,8 +170,11 @@ const postsWithWordCount = await Promise.all(
 
     // Reset initial typing state
     titleEl.textContent = '';
+    titleEl.setAttribute('contenteditable', 'false');
     dotEl.classList.remove('lit');
     cursorEl.classList.remove('cursor-finished');
+    cursorEl.style.display = 'inline-block';
+    if (hintEl) hintEl.classList.remove('revealed');
     if (badgeEl) badgeEl.classList.remove('revealed');
     if (scrollCueEl) scrollCueEl.classList.remove('revealed');
     if (recentPostsEl) recentPostsEl.classList.remove('revealed');
@@ -126,8 +192,21 @@ const postsWithWordCount = await Promise.all(
 
     function finishTyping() {
       cursorEl.classList.add('cursor-finished');
+      cursorEl.style.display = 'none';
+
       // Light up the iconic golden dot!
       dotEl.classList.add('lit');
+
+      // Enable real interactive typing!
+      enableInteractiveTyping();
+
+      // Show typing hint briefly (3.5s)
+      if (hintEl) {
+        hintEl.classList.add('revealed');
+        hintTimeoutId = window.setTimeout(() => {
+          hintEl.classList.remove('revealed');
+        }, 3500);
+      }
 
       // Smoothly fade in the capsule badge, scroll down cue, and content below
       if (badgeEl) badgeEl.classList.add('revealed');
@@ -154,6 +233,7 @@ const postsWithWordCount = await Promise.all(
     justify-content: center;
     padding: 1.5rem 1rem 3.5rem;
     box-sizing: border-box;
+    overflow: visible;
   }
 
   .hero-content {
@@ -162,18 +242,51 @@ const postsWithWordCount = await Promise.all(
     align-items: center;
     justify-content: center;
     margin-top: -1.75rem;
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-title {
     font-size: clamp(3.2rem, 7.5vw, 5.4rem);
     font-weight: 800;
     letter-spacing: -0.035em;
-    margin-bottom: 1.35rem;
-    line-height: 1.08;
+    margin-bottom: 0.6rem;
+    line-height: 1.25;
     position: relative;
     display: inline-flex;
     align-items: baseline;
     justify-content: center;
+    overflow: visible;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .typewriter-text {
+    outline: none;
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: var(--color-accent);
+    min-width: 1ch;
+    border-radius: 8px;
+    padding: 0 0.08em;
+    transition: background-color 0.2s ease;
+  }
+
+  .typewriter-text[contenteditable="true"]:hover {
+    background-color: rgba(248, 200, 34, 0.08);
+  }
+
+  .typewriter-text[contenteditable="true"]:focus {
+    background-color: rgba(248, 200, 34, 0.1);
+  }
+
+  .typewriter-text:empty::before {
+    content: attr(data-placeholder);
+    color: var(--color-text-secondary);
+    opacity: 0.35;
   }
 
   .typewriter-cursor {
@@ -199,30 +312,67 @@ const postsWithWordCount = await Promise.all(
     opacity: 0;
   }
 
+  /* Golden dot - pure multi-layer text-shadow for unclipped radiant aura */
   .hero-dot {
     color: var(--color-accent);
     opacity: 0;
     transform: scale(0.4);
     display: inline-block;
-    transition: opacity 0.3s ease-out, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.3s ease;
+    vertical-align: baseline;
+    padding: 0 0.15em;
+    margin-right: -0.1em;
+    overflow: visible;
+    transition: opacity 0.35s ease-out, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), text-shadow 0.35s ease;
   }
 
   .hero-dot.lit {
     opacity: 1;
     transform: scale(1);
-    text-shadow: 0 0 20px rgba(248, 200, 34, 0.8), 0 0 8px rgba(248, 200, 34, 0.95);
+    text-shadow:
+      0 0 10px rgba(248, 200, 34, 1),
+      0 0 24px rgba(248, 200, 34, 0.85),
+      0 0 48px rgba(248, 200, 34, 0.6),
+      0 0 75px rgba(248, 200, 34, 0.35);
     animation: dotPulse 3s ease-in-out infinite alternate;
   }
 
   @keyframes dotPulse {
     0% {
-      text-shadow: 0 0 16px rgba(248, 200, 34, 0.7), 0 0 6px rgba(248, 200, 34, 0.9);
-      filter: drop-shadow(0 0 4px rgba(248, 200, 34, 0.4));
+      text-shadow:
+        0 0 10px rgba(248, 200, 34, 1),
+        0 0 22px rgba(248, 200, 34, 0.8),
+        0 0 42px rgba(248, 200, 34, 0.55),
+        0 0 65px rgba(248, 200, 34, 0.3);
     }
     100% {
-      text-shadow: 0 0 28px rgba(248, 200, 34, 0.95), 0 0 12px rgba(248, 200, 34, 1);
-      filter: drop-shadow(0 0 8px rgba(248, 200, 34, 0.7));
+      text-shadow:
+        0 0 14px rgba(248, 200, 34, 1),
+        0 0 30px rgba(248, 200, 34, 0.95),
+        0 0 58px rgba(248, 200, 34, 0.7),
+        0 0 90px rgba(248, 200, 34, 0.45);
     }
+  }
+
+  /* Interactive typing tooltip hint */
+  .typing-hint {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-accent-text);
+    background-color: var(--color-tag-bg);
+    border: 1px solid var(--color-tag-border);
+    padding: 0.22rem 0.85rem;
+    border-radius: 9999px;
+    margin-bottom: 0.85rem;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+
+  .typing-hint.revealed {
+    opacity: 0.92;
+    transform: translateY(0);
   }
 
   .hero-badge {
