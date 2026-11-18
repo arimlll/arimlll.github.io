@@ -90,6 +90,11 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'furigana.hide': '隐藏假名',
     'furigana.show': '显示假名',
     'furigana.toggle': '开关假名标注',
+    'tategaki.hintVertical': '竖排（从右向左滚动）',
+    'tategaki.hintHorizontal': '横排（从上向下滚动）',
+    'tategaki.toHorizontal': '横排阅读',
+    'tategaki.toVertical': '竖排阅读',
+    'tategaki.toggle': '切换横竖排版',
   },
   en: {
     // Navigation
@@ -167,6 +172,11 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'furigana.hide': 'Hide Furigana',
     'furigana.show': 'Show Furigana',
     'furigana.toggle': 'Toggle Furigana',
+    'tategaki.hintVertical': 'Vertical (Scroll right to left)',
+    'tategaki.hintHorizontal': 'Horizontal (Scroll top to bottom)',
+    'tategaki.toHorizontal': 'Read horizontally',
+    'tategaki.toVertical': 'Read vertically',
+    'tategaki.toggle': 'Toggle vertical/horizontal reading',
   },
   ja: {
     // Navigation
@@ -244,5 +254,10 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'furigana.hide': 'ルビを隠す',
     'furigana.show': 'ルビを表示',
     'furigana.toggle': 'ルビ（ふりがな）表示切替',
+    'tategaki.hintVertical': '縦書き（右から左へスクロール）',
+    'tategaki.hintHorizontal': '横書き（上から下へスクロール）',
+    'tategaki.toHorizontal': '横書きで読む',
+    'tategaki.toVertical': '縦書きで読む',
+    'tategaki.toggle': '縦書き・横書き切替',
   },
 };

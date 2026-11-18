@@ -449,6 +449,46 @@ blockquote p {
   }
 }
 
+/* ===== Tategaki Horizontal Mode Overrides ===== */
+html[data-tategaki="horizontal"] .post[lang="ja"] .prose,
+.post[lang="ja"] .prose.horizontal-mode {
+  writing-mode: horizontal-tb !important;
+  direction: ltr !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 0 2rem !important;
+  line-height: 1.9 !important;
+}
+
+html[data-tategaki="horizontal"] .post[lang="ja"] .prose p,
+.post[lang="ja"] .prose.horizontal-mode p {
+  text-indent: 2em !important;
+  margin-left: 0 !important;
+  margin-bottom: 1.5em !important;
+}
+
+html[data-tategaki="horizontal"] .post[lang="ja"] .prose h2,
+.post[lang="ja"] .prose.horizontal-mode h2 {
+  border-left: none !important;
+  margin: 2rem 0 1rem !important;
+  padding: 0 0 0.4rem !important;
+  border-bottom: 2px solid var(--color-accent) !important;
+}
+
+html[data-tategaki="horizontal"] .post[lang="ja"] .prose h3,
+.post[lang="ja"] .prose.horizontal-mode h3 {
+  border-left: none !important;
+  margin: 1.8rem 0 0.8rem !important;
+  padding: 0 0 0.3rem !important;
+  border-bottom: 1px dashed var(--color-border) !important;
+}
+
 /* ===== Ruby Typography (ルビ組版) ===== */
 ruby {
   ruby-align: center;

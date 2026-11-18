@@ -88,6 +88,10 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
         // Furigana display initialization
         const storedFurigana = localStorage.getItem('furigana-display') || 'on';
         document.documentElement.setAttribute('data-furigana', storedFurigana);
+
+        // Japanese reading mode initialization (vertical vs horizontal)
+        const storedTategaki = localStorage.getItem('tategaki-mode') || 'vertical';
+        document.documentElement.setAttribute('data-tategaki', storedTategaki);
       })();
     </script>
   </head>
