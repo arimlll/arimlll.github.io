@@ -266,7 +266,7 @@ const postsWithWordCount = await Promise.all(
     font-size: clamp(3.2rem, 7.5vw, 5.4rem);
     font-weight: 800;
     letter-spacing: -0.035em;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.35rem;
     line-height: 1.25;
     position: relative;
     display: inline-flex;
@@ -340,9 +340,9 @@ const postsWithWordCount = await Promise.all(
   }
 
   .hero-badge {
-    margin-top: 0.75rem;
+    margin-top: 0.2rem;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
     transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -397,9 +397,9 @@ const postsWithWordCount = await Promise.all(
 
   .hero-motto {
     font-family: var(--font-serif);
-    font-size: 0.96rem;
+    font-size: clamp(1.12rem, 2.2vw, 1.3rem);
     color: var(--color-text-secondary);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     margin: 0;
     line-height: 1.5;
     user-select: text;

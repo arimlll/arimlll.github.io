@@ -110,10 +110,10 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Home
     'home.recentPosts': 'Recent Posts',
     'home.viewAll': 'All Posts',
-    'home.motto': '"Yellow River and Yangtze will not flow backwards"',
+    'home.motto': '"Yangtze and Yellow River will not flow backwards"',
     'home.badgeHtml': 'WeChat Official Account <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>',
     'home.scrollDown': 'Scroll to explore',
-    'home.subHtml': 'WeChat Official Account <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · "Yellow River and Yangtze will not flow backwards"',
+    'home.subHtml': 'WeChat Official Account <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · "Yangtze and Yellow River will not flow backwards"',
 
     // Post Card & Meta
     'post.backToList': 'Back to articles',
