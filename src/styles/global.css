@@ -184,6 +184,11 @@ body:has(.tategaki-toolbar) main {
   padding-top: 1.5rem;
 }
 
+main.is-home {
+  padding-top: var(--header-height);
+  padding-bottom: 3.5rem;
+}
+
 /* ===== Prose (Article Content) ===== */
 .prose {
   font-family: var(--font-serif);

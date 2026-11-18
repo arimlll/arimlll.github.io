@@ -25,6 +25,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Home
     'home.recentPosts': '最新文章',
     'home.viewAll': '全部文章',
+    'home.motto': '「黄河长江不会倒流」',
+    'home.badgeHtml': '微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>',
+    'home.scrollDown': '向下滚动查看',
     'home.subHtml': '微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」',
 
     // Post Card & Meta
@@ -107,6 +110,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Home
     'home.recentPosts': 'Recent Posts',
     'home.viewAll': 'All Posts',
+    'home.motto': '"Yellow River and Yangtze will not flow backwards"',
+    'home.badgeHtml': 'WeChat Official Account <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>',
+    'home.scrollDown': 'Scroll to explore',
     'home.subHtml': 'WeChat Official Account <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> · "Yellow River and Yangtze will not flow backwards"',
 
     // Post Card & Meta
@@ -189,6 +195,9 @@ export const UI_TRANSLATIONS: Record<Lang, Record<string, string>> = {
     // Home
     'home.recentPosts': '最新記事',
     'home.viewAll': 'すべての記事',
+    'home.motto': '「黄河と長江は逆流しない」',
+    'home.badgeHtml': 'WeChat 公式アカウント <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>',
+    'home.scrollDown': 'スクロールして記事を読む',
     'home.subHtml': 'WeChat 公式アカウント <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河と長江は逆流しない」',
 
     // Post Card & Meta

@@ -19,6 +19,7 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const rssURL = new URL('/rss.xml', Astro.site).href;
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '';
 const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} | 啊睿猫`;
 ---
 <!doctype html>
@@ -100,7 +101,7 @@ const pageTitle = title === '首页' ? '啊睿猫 | Ariml\'s Blog' : `${title} |
   <body>
     <Header />
     <slot name="sub-nav" />
-    <main class:list={['container', { 'has-sub-nav': hasSubNav }]}>
+    <main class:list={['container', { 'has-sub-nav': hasSubNav, 'is-home': isHome }]}>
       <slot />
     </main>
     <Footer />

@@ -17,13 +17,34 @@ const postsWithWordCount = await Promise.all(
 );
 ---
 <BaseLayout title="首页">
-  <section class="hero animate-fade-in">
-    <h1 class="hero-title" id="hero-title">Ariml<span class="hero-dot">.</span></h1>
-    <p class="hero-sub" data-i18n-html="home.subHtml">微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a> ·「黄河长江不会倒流」</p>
+  <section class="hero" id="home-hero">
+    <div class="hero-content">
+      <h1 class="hero-title" id="hero-title" aria-label="Ariml.">
+        <span class="typewriter-text" id="typewriter-title" data-text="Ariml.">Ariml<span class="hero-dot">.</span></span>
+      </h1>
+      <p class="hero-motto">
+        <span class="typewriter-text" id="typewriter-motto" data-i18n="home.motto" data-text="「黄河长江不会倒流」">「黄河长江不会倒流」</span>
+        <span class="typewriter-cursor" id="typewriter-cursor" aria-hidden="true"></span>
+      </p>
+      <div class="hero-badge" id="hero-badge">
+        <p class="hero-sub" data-i18n-html="home.badgeHtml">
+          微信公众号 <a href="https://mp.weixin.qq.com" target="_blank" rel="noopener" class="hero-link">@啊睿猫</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="hero-scroll-cue" id="hero-scroll-cue">
+      <a href="#recent-posts" class="scroll-cue-btn" id="scroll-cue-btn" aria-label="向下滚动查看最新文章">
+        <span class="scroll-cue-text" data-i18n="home.scrollDown">向下滚动查看</span>
+        <svg class="scroll-cue-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </a>
+    </div>
   </section>
 
   {posts.length > 0 && (
-    <section class="recent-posts">
+    <section class="recent-posts" id="recent-posts">
       <div class="section-header">
         <h2 class="section-title" data-i18n="home.recentPosts">最新文章</h2>
         <a href="/blog/" class="view-all-link"><span data-i18n="home.viewAll">全部文章</span> &rarr;</a>
@@ -47,37 +68,232 @@ const postsWithWordCount = await Promise.all(
   )}
 </BaseLayout>
 
+<script>
+  import { UI_TRANSLATIONS, type Lang } from '@/i18n/translations';
+
+  let typingTimeoutId: number | null = null;
+  let bounceTimeoutId: number | null = null;
+
+  function initHomeHero() {
+    if (typingTimeoutId) clearTimeout(typingTimeoutId);
+    if (bounceTimeoutId) clearTimeout(bounceTimeoutId);
+
+    const titleEl = document.getElementById('typewriter-title');
+    const mottoEl = document.getElementById('typewriter-motto');
+    const cursorEl = document.getElementById('typewriter-cursor');
+    const badgeEl = document.getElementById('hero-badge');
+    const scrollCueEl = document.getElementById('hero-scroll-cue');
+    const recentPostsEl = document.getElementById('recent-posts');
+    const cueBtn = document.getElementById('scroll-cue-btn');
+
+    if (!titleEl || !mottoEl || !cursorEl) return;
+
+    if (cueBtn && !cueBtn.dataset.bound) {
+      cueBtn.dataset.bound = 'true';
+      cueBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById('recent-posts');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    function getLocalizedMotto(): string {
+      const currentLang = (localStorage.getItem('lang') as Lang) || (document.documentElement.getAttribute('data-lang') as Lang) || 'zh';
+      const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.zh;
+      return dict['home.motto'] || '「黄河长江不会倒流」';
+    }
+
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      titleEl.innerHTML = 'Ariml<span class="hero-dot">.</span>';
+      mottoEl.textContent = getLocalizedMotto();
+      cursorEl.style.display = 'none';
+      if (badgeEl) badgeEl.classList.add('revealed');
+      if (scrollCueEl) scrollCueEl.classList.add('revealed');
+      return;
+    }
+
+    const titleBase = 'Ariml';
+    const mottoText = getLocalizedMotto();
+
+    // Reset initial typing state
+    titleEl.replaceChildren();
+    mottoEl.textContent = '';
+    cursorEl.classList.remove('cursor-finished');
+    if (badgeEl) badgeEl.classList.remove('revealed');
+    if (scrollCueEl) scrollCueEl.classList.remove('revealed');
+    if (recentPostsEl) recentPostsEl.classList.remove('bounce-attention');
+
+    // Attach cursor right after title element initially
+    titleEl.after(cursorEl);
+
+    let titleIndex = 0;
+    function typeTitle() {
+      if (titleIndex < titleBase.length) {
+        titleEl.textContent = titleBase.slice(0, titleIndex + 1);
+        titleIndex++;
+        typingTimeoutId = window.setTimeout(typeTitle, 75 + Math.random() * 35);
+      } else if (titleIndex === titleBase.length) {
+        // Append golden accent dot
+        titleEl.innerHTML = 'Ariml<span class="hero-dot">.</span>';
+        titleIndex++;
+        // Pause briefly before typing motto
+        typingTimeoutId = window.setTimeout(startMotto, 320);
+      }
+    }
+
+    let mottoIndex = 0;
+    function startMotto() {
+      // Move cursor to motto line
+      mottoEl.after(cursorEl);
+      typeMotto();
+    }
+
+    function typeMotto() {
+      if (mottoIndex < mottoText.length) {
+        mottoEl.textContent = mottoText.slice(0, mottoIndex + 1);
+        mottoIndex++;
+        typingTimeoutId = window.setTimeout(typeMotto, 60 + Math.random() * 30);
+      } else {
+        finishTyping();
+      }
+    }
+
+    function finishTyping() {
+      cursorEl.classList.add('cursor-finished');
+      if (badgeEl) badgeEl.classList.add('revealed');
+      if (scrollCueEl) scrollCueEl.classList.add('revealed');
+
+      // Trigger the upward bounce on the content below
+      bounceTimeoutId = window.setTimeout(() => {
+        if (recentPostsEl && window.scrollY < 80) {
+          recentPostsEl.classList.add('bounce-attention');
+          window.setTimeout(() => {
+            recentPostsEl.classList.remove('bounce-attention');
+          }, 1500);
+        }
+        if (scrollCueEl && window.scrollY < 80) {
+          scrollCueEl.classList.add('bounce-attention');
+          window.setTimeout(() => {
+            scrollCueEl.classList.remove('bounce-attention');
+          }, 1500);
+        }
+      }, 250);
+    }
+
+    typingTimeoutId = window.setTimeout(typeTitle, 180);
+
+    // Handle language change on the fly
+    window.addEventListener('lang-change', () => {
+      const newMotto = getLocalizedMotto();
+      mottoEl.textContent = newMotto;
+      mottoEl.setAttribute('data-text', newMotto);
+    });
+  }
+
+  initHomeHero();
+  document.addEventListener('astro:after-swap', initHomeHero);
+</script>
+
 <style>
   .hero {
+    position: relative;
     text-align: center;
-    padding: 3.5rem 0 2rem;
+    min-height: calc(100vh - var(--header-height));
+    min-height: calc(100dvh - var(--header-height));
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem 3.5rem;
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -1.75rem;
   }
 
   .hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(3.2rem, 7.5vw, 5.4rem);
     font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.75rem;
-    line-height: 1.1;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.15rem;
+    line-height: 1.08;
     position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
   }
 
   .hero-dot {
     color: var(--color-accent);
-    text-shadow: 0 0 20px rgba(248, 200, 34, 0.4);
+    text-shadow: 0 0 24px rgba(248, 200, 34, 0.45);
+  }
+
+  .hero-motto {
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 2.7vw, 1.7rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-text);
+    margin-bottom: 1.6rem;
+    text-align: center;
+    min-height: 2.2em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+  }
+
+  .typewriter-cursor {
+    display: inline-block;
+    width: 2.5px;
+    height: 1.15em;
+    vertical-align: -0.15em;
+    background-color: var(--color-accent);
+    margin-left: 3px;
+    animation: cursorBlink 0.75s step-end infinite;
+    box-shadow: 0 0 8px rgba(248, 200, 34, 0.6);
+    border-radius: 1px;
+    transition: opacity 0.5s ease-out;
+  }
+
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .typewriter-cursor.cursor-finished {
+    opacity: 0;
+  }
+
+  .hero-badge {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .hero-badge.revealed {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .hero-sub {
     color: var(--color-text-secondary);
     font-size: 0.95rem;
-    padding: 0.35rem 1rem;
+    padding: 0.35rem 1.1rem;
     border-radius: 9999px;
     background-color: var(--color-card-bg);
     border: 1px solid var(--color-card-border);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.04);
     display: inline-block;
   }
@@ -92,8 +308,141 @@ const postsWithWordCount = await Promise.all(
     color: var(--color-accent-hover);
   }
 
+  .hero-scroll-cue {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10;
+  }
+
+  .hero-scroll-cue.revealed {
+    opacity: 0.85;
+  }
+
+  .hero-scroll-cue:hover {
+    opacity: 1;
+  }
+
+  .scroll-cue-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+  }
+
+  .scroll-cue-btn:hover {
+    color: var(--color-accent-text);
+  }
+
+  .scroll-cue-icon {
+    animation: floatDown 2s ease-in-out infinite;
+  }
+
+  @keyframes floatDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
   .recent-posts {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
+    will-change: transform;
+  }
+
+  /* Physics-based upward bounce animation for content below */
+  @keyframes bounceUp {
+    0% {
+      transform: translateY(0);
+    }
+    16% {
+      transform: translateY(-42px);
+    }
+    32% {
+      transform: translateY(0);
+    }
+    48% {
+      transform: translateY(-24px);
+    }
+    64% {
+      transform: translateY(0);
+    }
+    78% {
+      transform: translateY(-10px);
+    }
+    88% {
+      transform: translateY(0);
+    }
+    95% {
+      transform: translateY(-3px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .recent-posts.bounce-attention {
+    animation: bounceUp 1.35s cubic-bezier(0.25, 1, 0.35, 1) both;
+  }
+
+  .hero-scroll-cue.bounce-attention {
+    animation: bounceUpCue 1.35s cubic-bezier(0.25, 1, 0.35, 1) both;
+  }
+
+  @keyframes bounceUpCue {
+    0% {
+      transform: translateX(-50%) translateY(0);
+    }
+    16% {
+      transform: translateX(-50%) translateY(-28px);
+    }
+    32% {
+      transform: translateX(-50%) translateY(0);
+    }
+    48% {
+      transform: translateX(-50%) translateY(-16px);
+    }
+    64% {
+      transform: translateX(-50%) translateY(0);
+    }
+    78% {
+      transform: translateX(-50%) translateY(-6px);
+    }
+    88% {
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .recent-posts.bounce-attention,
+    .hero-scroll-cue.bounce-attention {
+      animation: none !important;
+      transform: none !important;
+    }
+    .hero-badge,
+    .hero-scroll-cue {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .typewriter-cursor {
+      display: none !important;
+    }
+    .scroll-cue-icon {
+      animation: none !important;
+    }
   }
 
   .section-header {
